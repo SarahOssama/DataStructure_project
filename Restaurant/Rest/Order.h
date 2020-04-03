@@ -2,6 +2,7 @@
 #define __ORDER_H_
 
 #include "..\Defs.h"
+
 //trial
 
 class Restaurant; //Forward declation
