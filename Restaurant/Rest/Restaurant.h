@@ -45,6 +45,7 @@ public:
 	//
 	// TODO: Add More Member Functions As Needed
 	//
+	bool DeleteOrder();
 
 
 /// ===================    DEMO-related functions. Should be removed in phases 1&2   ================= 
