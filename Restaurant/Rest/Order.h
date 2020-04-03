@@ -2,9 +2,12 @@
 #define __ORDER_H_
 
 #include "..\Defs.h"
+//trial
+
+class Restaurant; //Forward declation
 
 class Order
-{
+{ 
 
 protected:
 	int ID;         //Each order has a unique ID (from 1 --> 999 )
