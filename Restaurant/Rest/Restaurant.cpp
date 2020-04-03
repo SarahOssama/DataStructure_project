@@ -71,6 +71,7 @@ void Restaurant::FillDrawingList()
 
 bool DeleteOrder()
 {
+	return true; //sandy
 }
 
 
