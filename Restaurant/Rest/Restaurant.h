@@ -29,6 +29,12 @@ private:
 	// TODO: Add More Data Members As Needed
 	//
 
+	Queue <Order*> VIPOrder_Q;  //Queue for VIP orders
+
+	Queue <Order*> NormalOrder_Q;  //Queue for Normal orders
+
+	Queue <Order*> VeganOrder_Q;  //Queue for Vegan orders
+
 public:
 	
 	Restaurant();
@@ -45,7 +51,8 @@ public:
 	//
 	// TODO: Add More Member Functions As Needed
 	//
-	bool DeleteOrder();
+
+	bool DeleteOrder(Order* pOrder); //to Delete an order
 
 
 /// ===================    DEMO-related functions. Should be removed in phases 1&2   ================= 
