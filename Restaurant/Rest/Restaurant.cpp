@@ -5,7 +5,7 @@ using namespace std;
 //farah
 #include "Restaurant.h"
 #include "..\Events\ArrivalEvent.h"
-
+#include "..\Events\CancelEvent.h"
 
 Restaurant::Restaurant() 
 {

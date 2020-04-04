@@ -13,7 +13,7 @@ void CancelEvent::Execute(Restaurant* pRest)
 
 	//bool deleted = pRest->DeleteOrder();
 
-
+	//Add test
 }
 
 //Destructor
