@@ -56,3 +56,7 @@ ORD_STATUS Order::getStatus() const
 	return status;
 }
 
+void Order::setType(ORD_TYPE t)
+{
+	type = t;
+}

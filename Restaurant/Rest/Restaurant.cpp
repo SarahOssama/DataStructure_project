@@ -208,14 +208,21 @@ void Restaurant::AddtoQueue(Order* pOrder)
 	
 }
 
+// a function to promote an order called from PromotionEvent 
 void Restaurant:: PromoteOrder(Order* pOrder)
 {
 	ORD_TYPE type = pOrder->GetType();
 	ORD_STATUS status = pOrder->getStatus();
 	
-	int id = pOrder->GetID();
-	//pOrder= NormalOrder_L.Find(id);  // error
-	AddtoQueue(pOrder);                               
+	if (type == TYPE_NRM && status == WAIT)
+	{
+		Order *promotedorder= NormalOrder_L.Find(pOrder);
+		promotedorder->setType(TYPE_VIP);
+		AddtoQueue(promotedorder);
+		
+		
+	}
+	                  
 }
 
 

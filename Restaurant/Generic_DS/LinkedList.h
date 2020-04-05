@@ -105,12 +105,12 @@ public:
 
 	//[2]Find 
 	//searches for a given value in the list, returns true if found; false otherwise.
-	Node<T>* Find(T Key)
+	T Find(T Key)
 	{
 		Node<T>* P = Head;
 		while (P)
 		{
-			if (P->getItem() == Key)
+			if (P == Key)
 			{
 				return P;
 			}

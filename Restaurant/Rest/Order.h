@@ -3,8 +3,8 @@
 
 #include "..\Defs.h"
 
-//trial
-//farah
+
+
 class Restaurant; //Forward declation
 
 class Order
@@ -42,10 +42,11 @@ public:
 	void setStatus(ORD_STATUS s);
 	ORD_STATUS getStatus() const;
 	
+	
 	//
 	// TODO: Add More Member Functions As Needed
 	//
-
+	void setType(ORD_TYPE t); // in case we wanted to promote an order from normal to VIP
 };
 
 #endif
