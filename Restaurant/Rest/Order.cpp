@@ -1,6 +1,6 @@
 #include "Order.h"
 #include "..\Rest\Restaurant.h"
-//Sara
+
 
 Order::Order(int id, ORD_TYPE r_Type)
 {
@@ -8,6 +8,16 @@ Order::Order(int id, ORD_TYPE r_Type)
 	type = r_Type;
 	status = WAIT;
 }
+
+Order::Order(int id, ORD_TYPE r_Type, int size, double tMoney)
+{
+	ID = (id > 0 && id < 1000) ? id : 0;	//1<ID<999
+	type = r_Type;
+	status = WAIT;
+	Size = size;
+	totalMoney = tMoney;
+}
+
 
 Order::~Order()
 {

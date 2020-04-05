@@ -15,7 +15,7 @@ protected:
 	ORD_TYPE type;		//order type: Normal, vegan, VIP
 	ORD_STATUS status;	//waiting, in-service, done
 	int Distance;	//The distance (in meters) between the order location and the resturant 
-	                
+	int Size; //added by Farah
 	double totalMoney;	//Total order money
 
 	int ArrTime, ServTime, FinishTime;	//arrival, service start, and finish times
@@ -27,6 +27,9 @@ protected:
 
 public:
 	Order(int ID, ORD_TYPE r_Type);
+
+	Order(int ID, ORD_TYPE r_Type, int size, double tMoney); //added by Farah
+
 	virtual ~Order();
 
 	int GetID();

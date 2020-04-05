@@ -53,7 +53,7 @@ public:
 	//
 
 	bool DeleteOrder(Order* pOrder); //to Delete an order
-
+	void AddtoQueue(Order* pOrder); //to add order to queue
 
 /// ===================    DEMO-related functions. Should be removed in phases 1&2   ================= 
 

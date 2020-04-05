@@ -150,6 +150,40 @@ bool Restaurant::DeleteOrder(Order* pOrder)
 	return true; 
 }
 
+//Adding order to a queue
+void Restaurant::AddtoQueue(Order* pOrder)
+{
+	ORD_TYPE type = pOrder->GetType();
+1
+
+	switch (type)
+	{
+	case TYPE_NRM:
+
+		NormalOrder_Q.enqueue(pOrder);
+
+		break;
+
+	case TYPE_VGAN:
+
+		VeganOrder_Q.enqueue(pOrder);
+
+		break;
+
+	case TYPE_VIP:
+
+			VIPOrder_Q.enqueue(pOrder);
+	
+		break;
+
+	default:
+
+		return ;
+
+	}
+	
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 /// ==> 
