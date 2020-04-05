@@ -84,7 +84,7 @@ bool Restaurant::DeleteOrder(Order* pOrder)
 	case TYPE_NRM: 
 
 		//to look for the Order to be deleted
-		while ( tempOrder->GetID != pOrder->GetID)
+		while ( tempOrder->GetID() != pOrder->GetID())
 		{
 			NormalOrder_Q.dequeue(tempOrder);
 			tempQ.enqueue(tempOrder);
@@ -105,7 +105,7 @@ bool Restaurant::DeleteOrder(Order* pOrder)
 	case TYPE_VGAN:
 
 		//to look for the Order to be deleted
-		while (tempOrder->GetID != pOrder->GetID)
+		while (tempOrder->GetID() != pOrder->GetID())
 		{
 			VeganOrder_Q.dequeue(tempOrder);
 			tempQ.enqueue(tempOrder);
@@ -125,7 +125,7 @@ bool Restaurant::DeleteOrder(Order* pOrder)
 	case TYPE_VIP:
 
 		//to look for the Order to be deleted
-		while (tempOrder->GetID != pOrder->GetID)
+		while (tempOrder->GetID() != pOrder->GetID())
 		{
 			VIPOrder_Q.dequeue(tempOrder);
 			tempQ.enqueue(tempOrder);
