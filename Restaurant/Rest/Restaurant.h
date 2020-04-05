@@ -9,12 +9,13 @@
 
 
 #include "Order.h"
-
+class Parser;  //forward declaration to class Parser
 // it is the maestro of the project
 class Restaurant  
 {	
 private:
 	GUI *pGUI;
+	Parser* Prsr; ///parser pointer to call it to open and read the file
 	Queue<Event*> EventsQueue;	//Queue of all events that will be loaded from file
 
 	
@@ -34,6 +35,10 @@ private:
 	Queue <Order*> NormalOrder_Q;  //Queue for Normal orders
 
 	Queue <Order*> VeganOrder_Q;  //Queue for Vegan orders
+	
+	Queue<Cook*> Cook_V_Q;
+	Queue<Cook*> Cook_N_Q;
+	Queue<Cook*> Cook_G_Q;
 
 public:
 	
@@ -51,6 +56,19 @@ public:
 	//
 	// TODO: Add More Member Functions As Needed
 	//
+	////////////////////////////////////////////////
+	//// Function Wrapper is a function that will be called in the Parser class 
+	//// The purpose of this function is to get usage of the input taken from the file processing operation
+	//// Espcially for the lines defining the events ,without breaking the classes responsabilities,
+	//// As the restaurant class will be the responsible of taking any precautions before calling the event_constructors
+	////////////////////////////////////////////////
+
+	//void Wrapper_Arrival(ORD_TYPE &r_Type,int &TS,int &id, int &size, int& mony);
+	//void Wrapper_Cancelation(int &TS, int& id);
+	//void Wrapper_Promote(int &TS, int& id, int& exmony);
+
+
+
 
 	bool DeleteOrder(Order* pOrder); //to Delete an order
 	void AddtoQueue(Order* pOrder); //to add order to queue

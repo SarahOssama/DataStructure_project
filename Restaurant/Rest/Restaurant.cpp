@@ -6,6 +6,8 @@ using namespace std;
 #include "Restaurant.h"
 #include "..\Events\ArrivalEvent.h"
 #include "..\Events\CancelEvent.h"
+#include"..\Parser.h"
+
 
 Restaurant::Restaurant() 
 {
@@ -20,6 +22,8 @@ void Restaurant::RunSimulation()
 	switch (mode)	//Add a function for each mode in next phases
 	{
 	case MODE_INTR:
+		Prsr->OpenFile(pGUI);
+		//Prsr->ReadFile();
 		break;
 	case MODE_STEP:
 		break;
@@ -154,7 +158,7 @@ bool Restaurant::DeleteOrder(Order* pOrder)
 void Restaurant::AddtoQueue(Order* pOrder)
 {
 	ORD_TYPE type = pOrder->GetType();
-1
+	
 
 	switch (type)
 	{
