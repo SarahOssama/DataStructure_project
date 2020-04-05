@@ -6,7 +6,7 @@
 #include "..\GUI\GUI.h"
 #include "..\Generic_DS\Queue.h"
 #include "..\Events\Event.h"
-
+#include "..\Generic_DS\LinkedList.h"
 
 #include "Order.h"
 class Parser;  //forward declaration to class Parser
@@ -32,7 +32,7 @@ private:
 
 	Queue <Order*> VIPOrder_Q;  //Queue for VIP orders
 
-	Queue <Order*> NormalOrder_Q;  //Queue for Normal orders
+	LinkedList <Order*> NormalOrder_L;  //List for Normal orders
 
 	Queue <Order*> VeganOrder_Q;  //Queue for Vegan orders
 	
@@ -72,6 +72,10 @@ public:
 
 	bool DeleteOrder(Order* pOrder); //to Delete an order
 	void AddtoQueue(Order* pOrder); //to add order to queue
+
+	void PromoteOrder(Order* pOrder); // to promote a normal order 
+
+
 
 /// ===================    DEMO-related functions. Should be removed in phases 1&2   ================= 
 

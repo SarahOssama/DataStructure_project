@@ -2,7 +2,6 @@
 #include <time.h>
 #include <iostream>
 using namespace std;
-//farah
 #include "Restaurant.h"
 #include "..\Events\ArrivalEvent.h"
 #include "..\Events\CancelEvent.h"
@@ -186,6 +185,16 @@ void Restaurant::AddtoQueue(Order* pOrder)
 
 	}
 	
+}
+
+void Restaurant:: PromoteOrder(Order* pOrder)
+{
+	ORD_TYPE type = pOrder->GetType();
+	ORD_STATUS status = pOrder->getStatus();
+	
+	int id = pOrder->GetID();
+	//pOrder= NormalOrder_L.Find(id);  // error
+	AddtoQueue(pOrder);                               
 }
 
 
