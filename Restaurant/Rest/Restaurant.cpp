@@ -56,6 +56,27 @@ void Restaurant::ExecuteEvents(int CurrentTimeStep)
 }
 
 
+//Wrapper function for arrival event
+
+void Restaurant::Wrapper_Arrival(ORD_TYPE& r_Type, int& TS, int& id, int& size, int& mony, Event* pEv)
+{
+	pEv = new ArrivalEvent(TS, id, r_Type, mony, size);
+	EventsQueue.enqueue(pEv);
+}
+
+// Wrapper function for cancel event
+
+void Restaurant::Wrapper_Cancelation(int& TS, int& id, Event* pEv)
+{
+	pEv = new CancelEvent(TS, id);
+	EventsQueue.enqueue(pEv);
+}
+// Wrapper function promotion event
+
+//void Wrapper_Promote(int &TS, int& id, int& exmony);
+
+
+
 Restaurant::~Restaurant()
 {
 		if (pGUI)
@@ -89,18 +110,18 @@ bool Restaurant::DeleteOrder(Order* pOrder)
 		//to look for the Order to be deleted
 		while ( tempOrder->GetID() != pOrder->GetID())
 		{
-			NormalOrder_Q.dequeue(tempOrder);
+			NormalOrder_L.DeleteNode(tempOrder);
 			tempQ.enqueue(tempOrder);
-			NormalOrder_Q.peekFront(tempOrder);
+			//NormalOrder_L.peekFront(tempOrder);
 		}
 
-		NormalOrder_Q.dequeue(terminator); //to get the order out and delete it
+		NormalOrder_L.DeleteNode(terminator); //to get the order out and delete it
 		delete terminator;
 
 		while(tempQ.peekFront(tempOrder))   //to return the rest of the queue
 		{ 
 			tempQ.dequeue(tempOrder);
-			NormalOrder_Q.enqueue(tempOrder);
+			NormalOrder_L.InsertEnd(tempOrder);
 		}
 
 		break;
@@ -163,7 +184,7 @@ void Restaurant::AddtoQueue(Order* pOrder)
 	{
 	case TYPE_NRM:
 
-		NormalOrder_Q.enqueue(pOrder);
+		NormalOrder_L.InsertEnd(pOrder);
 
 		break;
 
