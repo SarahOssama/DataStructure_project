@@ -95,7 +95,14 @@ void Restaurant::FillDrawingList()
 	//It should get orders from orders lists/queues/stacks/whatever (same for Cooks)
 	//To add orders it should call function  void GUI::AddToDrawingList(Order* pOrd);
 	//To add Cooks it should call function  void GUI::AddToDrawingList(Cook* pCc);
+	int size = 0;
+	Cook** pCook = Cook_V_Q.toArray(size);
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pCook[i]);
+	}
 
+	
 }
 
  
@@ -307,17 +314,37 @@ void Restaurant::Interactive_mode()
 	Order* pOrder;
 	Cook* pCook;
 
+	int cook_count; // number of all cooks in the restaurant
+	cook_count = nNormal + nVegan + nVIP;
 	int cID = 0;
+	
 	if (Prsr->OpenFile(pGUI))
 	{
 		Prsr->ReadFile(nNormal, nVegan, nVIP, spd_Nrm, spd_Vgn, spd_VIP, brk_o, brk_Nrm, brk_Vgn, brk_VIP, Autopromo, nEvnt, pRest, pEv);
 	}
-
+	//// Ids will not be repeated , as VIP are the most important we will assign to them the first set of Ids 
 	for (int i = 0; i < nVIP; i++)
 	{
 		cID++;
-		pCook = new Cook();
+		pCook = new Cook(cID,TYPE_VIP,spd_VIP,brk_o,brk_VIP);
+		Cook_V_Q.enqueue(pCook);
 	}
+
+	for (int i = 0; i < nNormal; i++)
+	{
+		cID++;
+		pCook = new Cook(cID, TYPE_NRM, spd_Nrm, brk_o, brk_Nrm);
+		Cook_N_Q.enqueue(pCook);
+
+	}
+	for (int i = 0; i < nVegan; i++)
+	{
+		cID++;
+		pCook = new Cook(cID, TYPE_VGAN, spd_Vgn, brk_o, brk_Vgn);
+		Cook_G_Q.enqueue(pCook);
+	}
+
+
 
 
 }
