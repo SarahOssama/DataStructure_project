@@ -74,7 +74,7 @@ public:
 	
 
 
-	bool DeleteOrder(Order* pOrder); //to Delete an order
+	bool DeleteOrder(int ID); //to Delete an order
 	void AddtoQueue(Order* pOrder); //to add order to queue
 
 	void PromoteOrder(Order* pOrder); // to promote a normal order 

@@ -100,84 +100,20 @@ void Restaurant::FillDrawingList()
 
  
 //to delete any order  will technically do the same in each type
-bool Restaurant::DeleteOrder(Order* pOrder)
+bool Restaurant::DeleteOrder(int ID)
 {
-	ORD_TYPE type=pOrder->GetType();
-
-	Queue <Order*> tempQ; 
-	Order* tempOrder ; 
-	Order* terminator; // To delete the Order (esm funny keda)
-
-	switch (type)
+	Order* pOrder = NormalOrder_L.GetOrderFromID(ID);     //to look for the Order to be deleted
+	if (pOrder)
 	{
-	case TYPE_NRM: 
+		ORD_STATUS status = pOrder->getStatus();
 
-		//to look for the Order to be deleted
-		while ( tempOrder->GetID() != pOrder->GetID())
-		{
-			NormalOrder_L.DeleteNode(tempOrder);
-			tempQ.enqueue(tempOrder);
-			//NormalOrder_L.peekFront(tempOrder);
-		}
+		if (status == WAIT)
+			return NormalOrder_L.DeleteNode(pOrder); // To delete the Order (esm funny keda)
 
-		NormalOrder_L.DeleteNode(terminator); //to get the order out and delete it
-		delete terminator;
-
-		while(tempQ.peekFront(tempOrder))   //to return the rest of the queue
-		{ 
-			tempQ.dequeue(tempOrder);
-			NormalOrder_L.InsertEnd(tempOrder);
-		}
-
-		break;
-
-	case TYPE_VGAN:
-
-		//to look for the Order to be deleted
-		while (tempOrder->GetID() != pOrder->GetID())
-		{
-			VeganOrder_Q.dequeue(tempOrder);
-			tempQ.enqueue(tempOrder);
-			VeganOrder_Q.peekFront(tempOrder);
-		}
-
-		VeganOrder_Q.dequeue(terminator); //to get the order out and delete it
-		delete terminator;
-
-		while (tempQ.peekFront(tempOrder))   //to return the rest of the queue
-		{
-			tempQ.dequeue(tempOrder);
-			VeganOrder_Q.enqueue(tempOrder);
-		}
-		break;
-
-	case TYPE_VIP:
-
-		//to look for the Order to be deleted
-		while (tempOrder->GetID() != pOrder->GetID())
-		{
-			VIPOrder_Q.dequeue(tempOrder);
-			tempQ.enqueue(tempOrder);
-			VIPOrder_Q.peekFront(tempOrder);
-		}
-
-		VIPOrder_Q.dequeue(terminator); //to get the order out and delete it
-		delete terminator;
-
-		while (tempQ.peekFront(tempOrder))   //to return the rest of the queue
-		{
-			tempQ.dequeue(tempOrder);
-			VIPOrder_Q.enqueue(tempOrder);
-		}
-		break;
-	
-	default:
-
-		return false;
-		
 	}
-	return true; 
+	return false;
 }
+
 
 //Adding order to a queue
 void Restaurant::AddtoQueue(Order* pOrder)
