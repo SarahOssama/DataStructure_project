@@ -42,7 +42,7 @@ void Parser::ReadFile(int& nN, int& nG, int& nV, int& sN, int& sG, int& sV, int&
 	int money; // order paid money
 	int size; // order size
 	ORD_TYPE OT; //order type .. (enum)..parameter of arrival_event_constructor
-	char ot;// order type ..(char)..loaded from the file
+	
 	for (int i = 0; i < M; i++)// calls wrapper function of pRest which by its turn calls the events_constructors
 	{
 		InFile.getline(evtype_line,25,'\0');

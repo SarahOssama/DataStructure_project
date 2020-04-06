@@ -74,7 +74,7 @@ void Restaurant::Wrapper_Cancelation(int& TS, int& id, Event* pEv)
 }
 // Wrapper function promotion event
 
-void Wrapper_Promote(int& TS, int& id, int& exmony, Event* pEv)
+void Restaurant::Wrapper_Promote(int& TS, int& id, int& exmony, Event* pEv)
 {
 	pEv = new PromotionEvent(TS,id,exmony);
 	EventsQueue.enqueue(pEv);
@@ -353,5 +353,36 @@ void Restaurant::AddtoDemoQueue(Order *pOrd)
 
 /// ==> end of DEMO-related function
 //////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////Interactive mode function////////////////////////////////////
 
+void Restaurant::Interactive_mode()
+{
+	pGUI->PrintMessage("Welcome to the Interactive Mode !!...");
+
+	int nNormal,nVegan,nVIP; // Number of normal , vegan , vip cooks
+	int spd_Nrm, spd_Vgn, spd_VIP; //Speed of each type of cooks
+	int brk_o; // Number of dishes that a cook must finish before break
+	int brk_Nrm, brk_Vgn, brk_VIP;  // break period in timesteps
+	int Autopromo; // limit for autopromotion
+	int nEvnt;// number of events
+
+	Restaurant* pRest;
+	Event* pEv;
+	Order* pOrder;
+	Cook* pCook;
+
+	int cID = 0;
+	if (Prsr->OpenFile(pGUI))
+	{
+		Prsr->ReadFile(nNormal, nVegan, nVIP, spd_Nrm, spd_Vgn, spd_VIP, brk_o, brk_Nrm, brk_Vgn, brk_VIP, Autopromo, nEvnt, pRest, pEv);
+	}
+
+	for (int i = 0; i < nVIP; i++)
+	{
+		cID++;
+		pCook = new Cook();
+	}
+
+
+}
 

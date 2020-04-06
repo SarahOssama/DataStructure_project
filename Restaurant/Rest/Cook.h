@@ -8,9 +8,12 @@ class Cook
 	int ID;
 	ORD_TYPE type;	//for each order type there is a corresponding type (VIP, Normal, Vegan)
 	int speed;		//dishes it can prepare in one clock tick (in one timestep)
+	int dishes_break;     // number of dishes that he must finish before break
+	int inbreak;     // break period in timesteps
 
 public:
 	Cook();
+
 	virtual ~Cook();
 	int GetID() const;
 	ORD_TYPE GetType() const;
