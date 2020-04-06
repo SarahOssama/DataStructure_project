@@ -5,6 +5,7 @@ using namespace std;
 #include "Restaurant.h"
 #include "..\Events\ArrivalEvent.h"
 #include "..\Events\CancelEvent.h"
+#include"..\Events\PromotionEvent.h"
 #include"..\Parser.h"
 
 
@@ -73,7 +74,11 @@ void Restaurant::Wrapper_Cancelation(int& TS, int& id, Event* pEv)
 }
 // Wrapper function promotion event
 
-//void Wrapper_Promote(int &TS, int& id, int& exmony);
+void Wrapper_Promote(int& TS, int& id, int& exmony, Event* pEv)
+{
+	pEv = new PromotionEvent(TS,id,exmony);
+	EventsQueue.enqueue(pEv);
+}
 
 
 

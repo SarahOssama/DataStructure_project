@@ -65,7 +65,7 @@ public:
 
 	void Wrapper_Arrival(ORD_TYPE& r_Type, int& TS, int& id, int& size, int& mony, Event* pEv);
 	void Wrapper_Cancelation(int& TS, int& id, Event* pEv);
-	//void Wrapper_Promote(int &TS, int& id, int& exmony);
+	void Wrapper_Promote(int &TS, int& id, int& exmony,Event* pEv);
 	
 
 

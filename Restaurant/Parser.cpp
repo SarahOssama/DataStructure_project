@@ -74,18 +74,24 @@ void Parser::ReadFile(int& nN, int& nG, int& nV, int& sN, int& sG, int& sV, int&
 			{
 				OT = TYPE_VIP;
 			}
-			TS = newstr[2];
-			id = newstr[3];
-			size = newstr[4];
-			money = newstr[5];
+			/////////////////////////// All char numbers will be converted to their ASCII value
+			/////////////////////////// To correct this to their actual value we substract the ASCII value of '0'
+			TS = newstr[2]-'0';
+			id = newstr[3]-'0';
+			size = newstr[4]-'0';
+			money = newstr[5]-'0';
 			pRest->Wrapper_Arrival(OT, TS, id, size, money, pEv);
 
 				break;
 		case 'P':
+			TS = newstr[1]-'0';
+			id = newstr[2]-'0';
+			money = newstr[3]-'0';
+			pRest->Wrapper_Promote(TS, id, money, pEv);
 			break;
 		case 'X':
-			TS = newstr[1];
-			id = newstr[2];
+			TS = newstr[1]-'0';
+			id = newstr[2]-'0';
 			pRest->Wrapper_Cancelation(TS, id, pEv);
 			break;
 		default:
