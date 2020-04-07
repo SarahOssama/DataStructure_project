@@ -320,9 +320,11 @@ public:
 			return false;
 		else
 		{
-			Node<T>* ptr = Head;
-			order = ptr->getItem();
-			ptr = ptr->getNext();
+			Node<T>* tempPtr = Head;
+			order = Head->getItem();
+			Head = Head->getNext();
+			delete tempPtr;
+			tempPtr = nullptr;
 			return true;
 		}
 

@@ -363,9 +363,9 @@ void Restaurant::Interactive_mode()
 		Order* NormalOrder_picked;
 		Order* VeganOrder_picked;
 
-		bool VIPorder = VIPOrder_Q.peekFront(VIPOrder_picked);
+		bool VIPorder = VIPOrder_Q.dequeue(VIPOrder_picked);
 		bool Normalorder = NormalOrder_L.GetfirstNode(NormalOrder_picked);
-		bool Veganorder = VeganOrder_Q.peekFront(VeganOrder_picked);
+		bool Veganorder = VeganOrder_Q.dequeue(VeganOrder_picked);
 
 		if (VIPorder)
 			VIPOrder_picked->setStatus(SRV);
@@ -374,7 +374,13 @@ void Restaurant::Interactive_mode()
 		if (Veganorder)
 			VeganOrder_picked->setStatus(SRV);
 
+		// 1- create array using bag interface
+		// it will be a data member in the restaurant class (in service/finished orders)
+		// 2- add a data member in order named serviced time and set it with the current time 
 
+		// 3- then looping on the array to check if serviced time +5 = current time 
+		//   if yes change it's status from srv to finished 
+		//  when calling the filldrawing fn().. it will loop and draw also this array (ne5aliha te3mel keda ma3 eel tanyin !! ;) )
 
 	}
 
