@@ -157,19 +157,20 @@ void Restaurant::AddtoQueue(Order* pOrder)
 }
 
 
-void Restaurant:: PromoteOrder(Order* pOrder)
+void Restaurant:: PromoteOrder(int ID)
 {
-	ORD_TYPE type = pOrder->GetType();
-	ORD_STATUS status = pOrder->getStatus();
-	
-	if (type == TYPE_NRM && status == WAIT)
+	Order* pOrder = NormalOrder_L.GetOrderFromID(ID);
+	if (pOrder)
 	{
-		Order *promotedorder= NormalOrder_L.Find(pOrder);
-		promotedorder->setType(TYPE_VIP);
-		AddtoQueue(promotedorder);
-		
-		
+		Order* TempOrder = pOrder;
+		pOrder->setType(TYPE_VIP);
+		AddtoQueue(pOrder);
+		bool deleted = NormalOrder_L.DeleteNode(TempOrder);
+
 	}
+		
+		
+	
 	                  
 }
 

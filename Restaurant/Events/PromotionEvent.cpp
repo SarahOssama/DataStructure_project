@@ -11,8 +11,8 @@ PromotionEvent::PromotionEvent(int eTime, int oID, int exMoney) :Event(eTime, oI
 void PromotionEvent::Execute(Restaurant* pRest)
 {
 
-	//pRest->PromoteOrder();
-	//pRest->DeleteOrder();
+	pRest->PromoteOrder(getOrderID());
+	
 
 
 }
