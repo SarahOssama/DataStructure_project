@@ -301,6 +301,17 @@ public:
 		return nullptr;
 	}
 
+
+	//[11] IsEmpty
+	bool IsEmpty()
+	{
+		if (Head == nullptr)
+			return true;
+		else
+			return false;
+
+	}
+
 };
 
 #endif	
