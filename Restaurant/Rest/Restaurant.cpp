@@ -208,7 +208,7 @@ void Restaurant::AddtoQueue(Order* pOrder)
 	
 }
 
-// a function to promote an order called from PromotionEvent 
+
 void Restaurant:: PromoteOrder(Order* pOrder)
 {
 	ORD_TYPE type = pOrder->GetType();
