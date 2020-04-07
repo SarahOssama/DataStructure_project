@@ -357,7 +357,29 @@ void Restaurant::Interactive_mode()
 
 		FillDrawingList();
 		CurrentTime++;
+
+		//b) Pick one order from each order type and move it to In service  List
+		Order* VIPOrder_picked;
+		Order* NormalOrder_picked;
+		Order* VeganOrder_picked;
+
+		bool VIPorder = VIPOrder_Q.peekFront(VIPOrder_picked);
+		bool Normalorder = NormalOrder_L.GetfirstNode(NormalOrder_picked);
+		bool Veganorder = VeganOrder_Q.peekFront(VeganOrder_picked);
+
+		if (VIPorder)
+			VIPOrder_picked->setStatus(SRV);
+		if (Normalorder)
+			NormalOrder_picked->setStatus(SRV);
+		if (Veganorder)
+			VeganOrder_picked->setStatus(SRV);
+
+
+
 	}
+
+	
+
 
 }
 

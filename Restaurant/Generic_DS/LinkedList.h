@@ -313,6 +313,22 @@ public:
 
 	}
 
+	//[12] get first node in the List 
+	bool GetfirstNode(T& order)
+	{
+		if (Head == nullptr)
+			return false;
+		else
+		{
+			Node<T>* ptr = Head;
+			order = ptr->getItem();
+			ptr = ptr->getNext();
+			return true;
+		}
+
+		
+	}
+
 };
 
 #endif	
