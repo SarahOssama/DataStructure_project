@@ -303,6 +303,7 @@ public:
 
 
 	//[11] IsEmpty
+
 	bool IsEmpty()
 	{
 		if (Head == nullptr)

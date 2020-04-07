@@ -347,6 +347,17 @@ void Restaurant::Interactive_mode()
 
 	
 
+	int CurrentTime = 1;
+	while (!EventsQueue.isEmpty() || !VIPOrder_Q.isEmpty() || !VeganOrder_Q.isEmpty() || !NormalOrder_L.IsEmpty())
+	{
+
+		ExecuteEvents(CurrentTime);
+
+
+
+		FillDrawingList();
+		CurrentTime++;
+	}
 
 }
 
