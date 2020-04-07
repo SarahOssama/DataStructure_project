@@ -5,6 +5,7 @@ using namespace std;
 #include "Restaurant.h"
 #include "..\Events\ArrivalEvent.h"
 #include "..\Events\CancelEvent.h"
+#include"..\Events\PromotionEvent.h"
 #include"..\Parser.h"
 
 
@@ -73,7 +74,11 @@ void Restaurant::Wrapper_Cancelation(int& TS, int& id, Event* pEv)
 }
 // Wrapper function promotion event
 
-//void Wrapper_Promote(int &TS, int& id, int& exmony);
+void Restaurant::Wrapper_Promote(int& TS, int& id, int& exmony, Event* pEv)
+{
+	pEv = new PromotionEvent(TS,id,exmony);
+	EventsQueue.enqueue(pEv);
+}
 
 
 
@@ -90,89 +95,32 @@ void Restaurant::FillDrawingList()
 	//It should get orders from orders lists/queues/stacks/whatever (same for Cooks)
 	//To add orders it should call function  void GUI::AddToDrawingList(Order* pOrd);
 	//To add Cooks it should call function  void GUI::AddToDrawingList(Cook* pCc);
+	int size = 0;
+	Cook** pCook = Cook_V_Q.toArray(size);
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pCook[i]);
+	}
 
+	
 }
 
  
 //to delete any order  will technically do the same in each type
-bool Restaurant::DeleteOrder(Order* pOrder)
+bool Restaurant::DeleteOrder(int ID)
 {
-	ORD_TYPE type=pOrder->GetType();
-
-	Queue <Order*> tempQ; 
-	Order* tempOrder ; 
-	Order* terminator; // To delete the Order (esm funny keda)
-
-	switch (type)
+	Order* pOrder = NormalOrder_L.GetOrderFromID(ID);     //to look for the Order to be deleted
+	if (pOrder)
 	{
-	case TYPE_NRM: 
+		ORD_STATUS status = pOrder->getStatus();
 
-		//to look for the Order to be deleted
-		while ( tempOrder->GetID() != pOrder->GetID())
-		{
-			NormalOrder_L.DeleteNode(tempOrder);
-			tempQ.enqueue(tempOrder);
-			//NormalOrder_L.peekFront(tempOrder);
-		}
+		if (status == WAIT)
+			return NormalOrder_L.DeleteNode(pOrder); // To delete the Order (esm funny keda)
 
-		NormalOrder_L.DeleteNode(terminator); //to get the order out and delete it
-		delete terminator;
-
-		while(tempQ.peekFront(tempOrder))   //to return the rest of the queue
-		{ 
-			tempQ.dequeue(tempOrder);
-			NormalOrder_L.InsertEnd(tempOrder);
-		}
-
-		break;
-
-	case TYPE_VGAN:
-
-		//to look for the Order to be deleted
-		while (tempOrder->GetID() != pOrder->GetID())
-		{
-			VeganOrder_Q.dequeue(tempOrder);
-			tempQ.enqueue(tempOrder);
-			VeganOrder_Q.peekFront(tempOrder);
-		}
-
-		VeganOrder_Q.dequeue(terminator); //to get the order out and delete it
-		delete terminator;
-
-		while (tempQ.peekFront(tempOrder))   //to return the rest of the queue
-		{
-			tempQ.dequeue(tempOrder);
-			VeganOrder_Q.enqueue(tempOrder);
-		}
-		break;
-
-	case TYPE_VIP:
-
-		//to look for the Order to be deleted
-		while (tempOrder->GetID() != pOrder->GetID())
-		{
-			VIPOrder_Q.dequeue(tempOrder);
-			tempQ.enqueue(tempOrder);
-			VIPOrder_Q.peekFront(tempOrder);
-		}
-
-		VIPOrder_Q.dequeue(terminator); //to get the order out and delete it
-		delete terminator;
-
-		while (tempQ.peekFront(tempOrder))   //to return the rest of the queue
-		{
-			tempQ.dequeue(tempOrder);
-			VIPOrder_Q.enqueue(tempOrder);
-		}
-		break;
-	
-	default:
-
-		return false;
-		
 	}
-	return true; 
+	return false;
 }
+
 
 //Adding order to a queue
 void Restaurant::AddtoQueue(Order* pOrder)
@@ -348,5 +296,56 @@ void Restaurant::AddtoDemoQueue(Order *pOrd)
 
 /// ==> end of DEMO-related function
 //////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////Interactive mode function////////////////////////////////////
 
+void Restaurant::Interactive_mode()
+{
+	pGUI->PrintMessage("Welcome to the Interactive Mode !!...");
+
+	int nNormal,nVegan,nVIP; // Number of normal , vegan , vip cooks
+	int spd_Nrm, spd_Vgn, spd_VIP; //Speed of each type of cooks
+	int brk_o; // Number of dishes that a cook must finish before break
+	int brk_Nrm, brk_Vgn, brk_VIP;  // break period in timesteps
+	int Autopromo; // limit for autopromotion
+	int nEvnt;// number of events
+
+	Restaurant* pRest;
+	Event* pEv;
+	Order* pOrder;
+	Cook* pCook;
+
+	int cook_count; // number of all cooks in the restaurant
+	cook_count = nNormal + nVegan + nVIP;
+	int cID = 0;
+	
+	if (Prsr->OpenFile(pGUI))
+	{
+		Prsr->ReadFile(nNormal, nVegan, nVIP, spd_Nrm, spd_Vgn, spd_VIP, brk_o, brk_Nrm, brk_Vgn, brk_VIP, Autopromo, nEvnt, pRest, pEv);
+	}
+	//// Ids will not be repeated , as VIP are the most important we will assign to them the first set of Ids 
+	for (int i = 0; i < nVIP; i++)
+	{
+		cID++;
+		pCook = new Cook(cID,TYPE_VIP,spd_VIP,brk_o,brk_VIP);
+		Cook_V_Q.enqueue(pCook);
+	}
+
+	for (int i = 0; i < nNormal; i++)
+	{
+		cID++;
+		pCook = new Cook(cID, TYPE_NRM, spd_Nrm, brk_o, brk_Nrm);
+		Cook_N_Q.enqueue(pCook);
+
+	}
+	for (int i = 0; i < nVegan; i++)
+	{
+		cID++;
+		pCook = new Cook(cID, TYPE_VGAN, spd_Vgn, brk_o, brk_Vgn);
+		Cook_G_Q.enqueue(pCook);
+	}
+
+
+
+
+}
 

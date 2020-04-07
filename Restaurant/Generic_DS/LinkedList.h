@@ -284,6 +284,23 @@ public:
 	//Reverses the linked list (without allocating any new Nodes)
 	void Reverse();
 
+
+	//[10] GetOrderFromID
+	//Returns the order from its ID
+	Order* GetOrderFromID(int ID)
+	{
+		Order* SearchOrder = Head;
+
+		while (SearchOrder)
+		{
+			if (SearchOrder->GetID() == ID)
+			{
+				return SearchOrder;
+			}
+		}
+		return nullptr;
+	}
+
 };
 
 #endif	

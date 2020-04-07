@@ -36,9 +36,11 @@ private:
 
 	Queue <Order*> VeganOrder_Q;  //Queue for Vegan orders
 	
-	Queue<Cook*> Cook_V_Q;
-	Queue<Cook*> Cook_N_Q;
-	Queue<Cook*> Cook_G_Q;
+	Queue<Cook*> Cook_V_Q;  //Queue for VIP cooks
+
+	Queue<Cook*> Cook_N_Q;  //Queue for Normal cooks
+
+	Queue<Cook*> Cook_G_Q;  //Queue for Vegan cooks
 
 public:
 	
@@ -56,6 +58,9 @@ public:
 	//
 	// TODO: Add More Member Functions As Needed
 	//
+
+
+
 	////////////////////////////////////////////////
 	//// Function Wrapper is a function that will be called in the Parser class 
 	//// The purpose of this function is to get usage of the input taken from the file processing operation
@@ -65,11 +70,11 @@ public:
 
 	void Wrapper_Arrival(ORD_TYPE& r_Type, int& TS, int& id, int& size, int& mony, Event* pEv);
 	void Wrapper_Cancelation(int& TS, int& id, Event* pEv);
-	//void Wrapper_Promote(int &TS, int& id, int& exmony);
+	void Wrapper_Promote(int &TS, int& id, int& exmony,Event* pEv);
 	
 
 
-	bool DeleteOrder(Order* pOrder); //to Delete an order
+	bool DeleteOrder(int ID); //to Delete an order
 	void AddtoQueue(Order* pOrder); //to add order to queue
 
 	void PromoteOrder(Order* pOrder); // to promote a normal order 
@@ -82,7 +87,8 @@ public:
 	void AddtoDemoQueue(Order* po);	//adds an order to the demo queue
 
 /// ================================================================================================== 
-
+///==================== Interactive Mode function
+	void Interactive_mode();
 
 
 };

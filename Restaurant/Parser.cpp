@@ -42,7 +42,7 @@ void Parser::ReadFile(int& nN, int& nG, int& nV, int& sN, int& sG, int& sV, int&
 	int money; // order paid money
 	int size; // order size
 	ORD_TYPE OT; //order type .. (enum)..parameter of arrival_event_constructor
-	char ot;// order type ..(char)..loaded from the file
+	
 	for (int i = 0; i < M; i++)// calls wrapper function of pRest which by its turn calls the events_constructors
 	{
 		InFile.getline(evtype_line,25,'\0');
@@ -74,18 +74,24 @@ void Parser::ReadFile(int& nN, int& nG, int& nV, int& sN, int& sG, int& sV, int&
 			{
 				OT = TYPE_VIP;
 			}
-			TS = newstr[2];
-			id = newstr[3];
-			size = newstr[4];
-			money = newstr[5];
+			/////////////////////////// All char numbers will be converted to their ASCII value
+			/////////////////////////// To correct this to their actual value we substract the ASCII value of '0'
+			TS = newstr[2]-'0';
+			id = newstr[3]-'0';
+			size = newstr[4]-'0';
+			money = newstr[5]-'0';
 			pRest->Wrapper_Arrival(OT, TS, id, size, money, pEv);
 
 				break;
 		case 'P':
+			TS = newstr[1]-'0';
+			id = newstr[2]-'0';
+			money = newstr[3]-'0';
+			pRest->Wrapper_Promote(TS, id, money, pEv);
 			break;
 		case 'X':
-			TS = newstr[1];
-			id = newstr[2];
+			TS = newstr[1]-'0';
+			id = newstr[2]-'0';
 			pRest->Wrapper_Cancelation(TS, id, pEv);
 			break;
 		default:
