@@ -60,3 +60,8 @@ void Order::setType(ORD_TYPE t)
 {
 	type = t;
 }
+
+void Order::SetServTime(int time)
+{
+	ServTime = time;
+}
