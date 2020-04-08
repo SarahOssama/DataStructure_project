@@ -14,8 +14,10 @@ void Parser::setFileName(string fn)
 bool Parser::OpenFile(GUI* pGUI)
 {
 	pGUI->PrintMessage("Please enter File name you want to open = ");
-	string fn = pGUI->GetString();
-	setFileName(fn + ".txt");
+	//string fn = pGUI->GetString();
+	//setFileName(fn + ".txt");
+	//this->fileName = pGUI->GetString()+".txt";
+	fileName = "test1.txt";
 	InFile.open(fileName, ios::in);
 	if (InFile.is_open())
 	{
