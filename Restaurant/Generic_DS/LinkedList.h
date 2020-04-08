@@ -289,7 +289,7 @@ public:
 	//Returns the order from its ID
 	Order* GetOrderFromID(int ID)
 	{
-		Order* SearchOrder = Head;
+		Order* SearchOrder = Head->getItem();
 
 		while (SearchOrder)
 		{

@@ -5,7 +5,7 @@
 //#include"Rest/Restaurant.h"
 #include"Defs.h"
 #include <fstream>
-
+#include"Events/Event.h"
 //// The main purpose of this class is to maintain program modularity and maintainability
 //// If we change the input way , this is the only class to be modified
 //// As the restaurant class will be based on a single type of inputs
