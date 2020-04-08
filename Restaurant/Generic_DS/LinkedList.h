@@ -289,14 +289,15 @@ public:
 	//Returns the order from its ID
 	Order* GetOrderFromID(int ID)
 	{
-		Order* SearchOrder = Head->getItem();
+		Node<T>* SearchOrder = Head;
 
 		while (SearchOrder)
 		{
-			if (SearchOrder->GetID() == ID)
+			if (SearchOrder->getItem()->GetID() == ID)
 			{
-				return SearchOrder;
+				return SearchOrder->getItem();
 			}
+			SearchOrder = SearchOrder->getNext();
 		}
 		return nullptr;
 	}
