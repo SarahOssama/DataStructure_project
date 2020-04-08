@@ -138,7 +138,7 @@ void Restaurant::FillDrawingList()
 	{
 		pGUI->AddToDrawingList(pOrder[i]);
 	}
-	pOrder = Non_Wating_Orders_B.toArray(size);
+	pOrder = In_Service_Orders_B.toArray(size);
 	for (int i = 0; i < size; i++)
 	{
 		pGUI->AddToDrawingList(pOrder[i]);
