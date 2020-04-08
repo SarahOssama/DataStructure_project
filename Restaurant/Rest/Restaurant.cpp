@@ -396,8 +396,10 @@ void Restaurant::Interactive_mode()
 	char timestep[10];
 	
 
-	while (!EventsQueue.isEmpty() || !Non_Wating_Orders_B.IsEmpty()) // we cannot check by (IsEmpty()) fn
-		                                                             // as the bag will also contain finished orders
+	while (!EventsQueue.isEmpty() || !In_Service_Orders_B.IsEmpty()) // we cannot check by (IsEmpty()) fn
+																	 // as the bag will also contain finished orders
+																	 // so we made another list for finished orders to solve this 
+																	 //problem and it's better for complexity to make another list
 	{
 		itoa(CurrentTime, timestep, 10);
 		pGUI->PrintMessage(timestep);
@@ -413,7 +415,7 @@ void Restaurant::Interactive_mode()
 		// or we can think another way.. fill the drawing list by orders just arrived before picking and blabla
 		// then update the interface .. then reset drawinglist and fill it another time after picking 
 		// but this way it will be called twice .. shoufi keda ra2yyek eih ?
-		
+
 
 		//b) Pick one order from each order type and move it to In service  List
 		Order* VIPOrder_picked;
@@ -425,11 +427,26 @@ void Restaurant::Interactive_mode()
 		bool Veganorder = VeganOrder_Q.dequeue(VeganOrder_picked);
 
 		if (VIPorder)
+		{
 			VIPOrder_picked->setStatus(SRV);
+			In_Service_Orders_B.AddNode(VIPOrder_picked); // we added the order to the in service list
+			VIPOrder_picked->SetServTime(CurrentTime);    // we set the servTime to the cuurent time 
+		}
 		if (Normalorder)
+		{
 			NormalOrder_picked->setStatus(SRV);
+			In_Service_Orders_B.AddNode(NormalOrder_picked); // we added the order to the in service list
+			NormalOrder_picked->SetServTime(CurrentTime);   // we set the servTime to the cuurent time 
+		}
 		if (Veganorder)
+		{
 			VeganOrder_picked->setStatus(SRV);
+			In_Service_Orders_B.AddNode(VeganOrder_picked);   // we added the order to the in service list
+			VeganOrder_picked->SetServTime(CurrentTime);      // we set the servTime to the cuurent time 
+		}
+
+		
+
 
 		// 1- create array using bag interface
 		// it will be a data member in the restaurant class (in service/finished orders)
@@ -441,7 +458,7 @@ void Restaurant::Interactive_mode()
 		//////the bag of orders will  also contain finished orders.. think of doing another fn to loop if there still smth in service??
 		//////or maybe doing another bag for finished orders and then avoid looping ?? 
 		//  when calling the filldrawing fn().. it will loop and draw also this array (ne5aliha te3mel keda ma3 eel tanyin !! ;) )
-
+		
 
 		
 		FillDrawingList();

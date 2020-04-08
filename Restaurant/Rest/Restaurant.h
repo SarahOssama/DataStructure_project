@@ -37,8 +37,10 @@ private:
 
 	Queue <Order*> VeganOrder_Q;  //Queue for Vegan orders
 
-	ListBag<Order*> Non_Wating_Orders_B; // linked bag for all orders in service or finished
-	
+	ListBag<Order*> In_Service_Orders_B; // linked bag for all orders in service
+
+	ListBag<Order*> Finished_Orders_B; // linked bag for all finished orders
+
 	Queue<Cook*> Cook_V_Q;  //Queue for VIP cooks
 
 	Queue<Cook*> Cook_N_Q;  //Queue for Normal cooks
