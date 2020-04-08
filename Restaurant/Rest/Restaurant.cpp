@@ -356,7 +356,7 @@ void Restaurant::Interactive_mode()
 
 
 		FillDrawingList();
-		CurrentTime++;
+		
 
 		//b) Pick one order from each order type and move it to In service  List
 		Order* VIPOrder_picked;
@@ -381,6 +381,13 @@ void Restaurant::Interactive_mode()
 		// 3- then looping on the array to check if serviced time +5 = current time 
 		//   if yes change it's status from srv to finished 
 		//  when calling the filldrawing fn().. it will loop and draw also this array (ne5aliha te3mel keda ma3 eel tanyin !! ;) )
+
+
+		
+		FillDrawingList();
+		pGUI->PrintMessage("Please click to continue..");
+		pGUI->waitForClick();
+		CurrentTime++;
 
 	}
 
