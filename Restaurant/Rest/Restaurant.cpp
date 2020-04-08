@@ -22,8 +22,7 @@ void Restaurant::RunSimulation()
 	switch (mode)	//Add a function for each mode in next phases
 	{
 	case MODE_INTR:
-		Prsr->OpenFile(pGUI);
-		//Prsr->ReadFile();
+		Interactive_mode();
 		break;
 	case MODE_STEP:
 		break;
@@ -96,13 +95,55 @@ void Restaurant::FillDrawingList()
 	//To add orders it should call function  void GUI::AddToDrawingList(Order* pOrd);
 	//To add Cooks it should call function  void GUI::AddToDrawingList(Cook* pCc);
 	int size = 0;
-	Cook** pCook = Cook_V_Q.toArray(size);
+	Cook** pCook;
+
+	pCook= Cook_V_Q.toArray(size);
 	for (int i = 0; i < size; i++)
 	{
 		pGUI->AddToDrawingList(pCook[i]);
 	}
-
 	
+	pCook = Cook_G_Q.toArray(size); // inside the "toArray" fn it initiates size =0 by itself
+	                                       // no need to make another counter to avoid problems in array dimension
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pCook[i]);
+	}
+	
+	pCook = Cook_N_Q.toArray(size); 
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pCook[i]);
+	}
+	//// it loops on each array look for the available cooks and draw them..
+	//// all cooks in those arrays are not busy (cooks from the queues are the available ones )
+	//// all busy cooks(in break or have orders) are stored in the linked bag .
+
+	Order** pOrder;
+
+	pOrder= VIPOrder_Q.toArray(size);
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pOrder[i]);
+	}
+    
+	pOrder = VeganOrder_Q.toArray(size);
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pOrder[i]);
+	}
+	
+	pOrder = NormalOrder_L.toArray(size);
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pOrder[i]);
+	}
+	pOrder = Non_Wating_Orders_B.toArray(size);
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pOrder[i]);
+	}
+
 }
 
  
@@ -303,7 +344,10 @@ void Restaurant::Interactive_mode()
 {
 	pGUI->PrintMessage("Welcome to the Interactive Mode !!...");
 
-	int nNormal,nVegan,nVIP; // Number of normal , vegan , vip cooks
+	
+	int nNormal = 0;
+	int nVegan = 0;
+	int nVIP = 0; // Number of normal , vegan , vip cooks
 	int spd_Nrm, spd_Vgn, spd_VIP; //Speed of each type of cooks
 	int brk_o; // Number of dishes that a cook must finish before break
 	int brk_Nrm, brk_Vgn, brk_VIP;  // break period in timesteps
@@ -348,14 +392,27 @@ void Restaurant::Interactive_mode()
 	
 
 	int CurrentTime = 1;
-	while (!EventsQueue.isEmpty() || !VIPOrder_Q.isEmpty() || !VeganOrder_Q.isEmpty() || !NormalOrder_L.IsEmpty())
+	//print current timestep
+	char timestep[10];
+	
+
+	while (!EventsQueue.isEmpty() || !Non_Wating_Orders_B.IsEmpty()) // we cannot check by (IsEmpty()) fn
+		                                                             // as the bag will also contain finished orders
 	{
+		itoa(CurrentTime, timestep, 10);
+		pGUI->PrintMessage(timestep);
+
 
 		ExecuteEvents(CurrentTime);
 
 
 
-		FillDrawingList();
+		//FillDrawingList();   filldrawinglist fn does not draw items ..
+		// it just fills the "drawing list" by items to be drawn when calling the "update interface fn"
+		// then no need to call it more than once in a loop
+		// or we can think another way.. fill the drawing list by orders just arrived before picking and blabla
+		// then update the interface .. then reset drawinglist and fill it another time after picking 
+		// but this way it will be called twice .. shoufi keda ra2yyek eih ?
 		
 
 		//b) Pick one order from each order type and move it to In service  List
@@ -380,15 +437,20 @@ void Restaurant::Interactive_mode()
 
 		// 3- then looping on the array to check if serviced time +5 = current time 
 		//   if yes change it's status from srv to finished 
+		//////NOTE... this loop will be infinite loop as is empty will never be true 
+		//////the bag of orders will  also contain finished orders.. think of doing another fn to loop if there still smth in service??
+		//////or maybe doing another bag for finished orders and then avoid looping ?? 
 		//  when calling the filldrawing fn().. it will loop and draw also this array (ne5aliha te3mel keda ma3 eel tanyin !! ;) )
 
 
 		
 		FillDrawingList();
+		pGUI->UpdateInterface();
 		pGUI->PrintMessage("Please click to continue..");
 		pGUI->waitForClick();
 		CurrentTime++;
-
+		pGUI->ResetDrawingList(); // to reset the drawing list and then update it with the following loop data
+	
 	}
 
 	

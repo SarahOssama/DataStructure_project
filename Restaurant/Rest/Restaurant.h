@@ -7,6 +7,7 @@
 #include "..\Generic_DS\Queue.h"
 #include "..\Events\Event.h"
 #include "..\Generic_DS\LinkedList.h"
+#include"..\Generic_DS\ListBag.h"
 
 #include "Order.h"
 class Parser;  //forward declaration to class Parser
@@ -35,12 +36,16 @@ private:
 	LinkedList <Order*> NormalOrder_L;  //List for Normal orders
 
 	Queue <Order*> VeganOrder_Q;  //Queue for Vegan orders
+
+	ListBag<Order*> Non_Wating_Orders_B; // linked bag for all orders in service or finished
 	
 	Queue<Cook*> Cook_V_Q;  //Queue for VIP cooks
 
 	Queue<Cook*> Cook_N_Q;  //Queue for Normal cooks
 
 	Queue<Cook*> Cook_G_Q;  //Queue for Vegan cooks
+
+	ListBag<Cook*> Unavailable_Cooks_B; // linked bag for all busy cooks or taking break
 
 public:
 	

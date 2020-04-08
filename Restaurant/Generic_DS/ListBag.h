@@ -88,6 +88,32 @@ public:
 		return;
 
 	}
+
+
+	T* ListBag<T>::toArray(int& count)
+	{
+		count = 0;
+
+		if (!Head)
+			return nullptr;
+		//counting the no. of items in the list
+		Node<T>* p = Head;
+		while (p)
+		{
+			count++;
+			p = p->getNext();
+		}
+
+
+		T* Arr = new T[count];
+		p = Head;
+		for (int i = 0; i < count; i++)
+		{
+			Arr[i] = p->getItem();
+			p = p->getNext();
+		}
+		return Arr;
+	}
 };
 
 
