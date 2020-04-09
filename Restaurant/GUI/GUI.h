@@ -34,7 +34,7 @@ class GUI
 private:
 	window *pWind;
 	color DrawingColors[TYPE_CNT];
-
+	
 
 	//The four regions in the GUI window: 
 
@@ -82,7 +82,7 @@ private:
 	static const int maxItemCnt = MaxPossibleOrdCnt+MaxPossibleMcCnt;
 	DrawingItem* DrawingList[maxItemCnt] ;	 //List of items pointers to be drawn every timestep
 	int DrawingItemsCount;	//actual no. of items in the drawing list
-	
+	int indicator=1;
 	//NOTES: 
 	//Orders are assumed to be sorted by arrival time
 	// At every time step, you should update those pointers 
@@ -92,6 +92,8 @@ private:
 	// 
 	// TODO: Add more members if needed
 	//
+
+
 
 	void DrawSingleItem(const DrawingItem* pDitem, int RegionCount) const;		//draws ONE item 
 	void DrawAllItems() ;		//drwas ALL items in DrawingList
