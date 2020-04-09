@@ -457,8 +457,22 @@ void Restaurant::Interactive_mode()
 		//////NOTE... this loop will be infinite loop as is empty will never be true 
 		//////the bag of orders will  also contain finished orders.. think of doing another fn to loop if there still smth in service??
 		//////or maybe doing another bag for finished orders and then avoid looping ?? 
-		//  when calling the filldrawing fn().. it will loop and draw also this array (ne5aliha te3mel keda ma3 eel tanyin !! ;) )
+		//  when calling the filldrawing fn().. it will loop and draw also this array (ne5aliha te3mel keda ma3 eel tanyin !! ;) 
+
 		
+		while (In_Service_Orders_B.FromInService_to_Finished() !=nullptr)   // loop on In service bag to transfer orders from in serv to finished 
+		{
+
+			Order* ord= In_Service_Orders_B.FromInService_to_Finished();  
+			if (CurrentTime == ord->GetServTime() + 5)
+			{
+				Order* temp = ord;
+				Finished_Orders_B.AddNode(ord);
+				ord->setStatus(DONE);
+				delete temp;
+			}
+			
+		}
 
 		
 		FillDrawingList();

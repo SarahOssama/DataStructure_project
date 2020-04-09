@@ -65,3 +65,8 @@ void Order::SetServTime(int time)
 {
 	ServTime = time;
 }
+
+int Order::GetServTime()
+{
+	return ServTime;
+}

@@ -114,6 +114,20 @@ public:
 		}
 		return Arr;
 	}
+
+	T FromInService_to_Finished()   //this function return a pointer to the first node in the In serv bag
+	{
+		Node<T>* ptr = Head;
+		while (Head)
+		{
+			Head = Head->getNext();
+			return (*ptr);
+		}
+	}
+
+
+
+
 };
 
 
