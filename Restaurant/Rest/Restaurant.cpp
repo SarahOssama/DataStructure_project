@@ -343,8 +343,8 @@ void Restaurant::AddtoDemoQueue(Order *pOrd)
 void Restaurant::Interactive_mode()
 {
 	pGUI->PrintMessage("Welcome to the Interactive Mode !!...");
-
 	
+	Prsr = new Parser();
 	int nNormal = 0;
 	int nVegan = 0;
 	int nVIP = 0; // Number of normal , vegan , vip cooks
@@ -354,8 +354,8 @@ void Restaurant::Interactive_mode()
 	int Autopromo; // limit for autopromotion
 	int nEvnt;// number of events
 
-	Restaurant* pRest;
-	Event* pEv;
+	Restaurant* pRest= new Restaurant();
+	Event* pEv = nullptr;
 	Order* pOrder;
 	Cook* pCook;
 
@@ -365,7 +365,7 @@ void Restaurant::Interactive_mode()
 	
 	if (Prsr->OpenFile(pGUI))
 	{
-		Prsr->ReadFile(nNormal, nVegan, nVIP, spd_Nrm, spd_Vgn, spd_VIP, brk_o, brk_Nrm, brk_Vgn, brk_VIP, Autopromo, nEvnt, pRest, pEv);
+ 		Prsr->ReadFile(nNormal, nVegan, nVIP, spd_Nrm, spd_Vgn, spd_VIP, brk_o, brk_Nrm, brk_Vgn, brk_VIP, Autopromo, nEvnt, pRest, pEv);
 	}
 	//// Ids will not be repeated , as VIP are the most important we will assign to them the first set of Ids 
 	for (int i = 0; i < nVIP; i++)

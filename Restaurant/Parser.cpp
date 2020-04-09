@@ -15,9 +15,10 @@ bool Parser::OpenFile(GUI* pGUI)
 {
 	pGUI->PrintMessage("Please enter File name you want to open = ");
 	//string fn = pGUI->GetString();
+	//string bb = "test1.txt";
 	//setFileName(fn + ".txt");
-	//this->fileName = pGUI->GetString()+".txt";
-	fileName = "test1.txt";
+	fileName = pGUI->GetString()+".txt";
+	//fileName = "test1.txt";
 	InFile.open(fileName, ios::in);
 	if (InFile.is_open())
 	{
@@ -49,14 +50,18 @@ void Parser::ReadFile(int& nN, int& nG, int& nV, int& sN, int& sG, int& sV, int&
 	{
 		InFile.getline(evtype_line,25,'\0');
 		int n = 0;
+		string s;
 		char* newstr = new char[25]; //used to ignore spaces
 		for (int i = 0; i < strlen(evtype_line); i++)
 		{
-			if (evtype_line[i] != ' ')
+			/*if (evtype_line[i] != ' ')
 			{
-				newstr[n] = evtype_line[i];
-				n++;
-			}
+				//newstr[n] = evtype_line[i];
+				//n++;
+
+			}*/
+			s += evtype_line[i];
+			//s.
 		}
 		newstr[n] = '\0';
 
