@@ -66,29 +66,8 @@ void Order::SetServTime(int time)
 	ServTime = time;
 }
 
-<<<<<<< HEAD
-//void Order::setSize(int s)
-//{
-//	Size = s;
-//}
-//
-//int Order::getSize() const
-//{
-//	return Size;
-//}
-//
-//void Order::settotalmoney(double m)
-//{
-//	totalMoney = m;
-//}
-//
-//double Order::gettotalmoney() const
-//{
-//	return totalMoney;
-//}
-=======
+
 int Order::GetServTime()
 {
 	return ServTime;
 }
->>>>>>> d6f414ced929390e30f1323295ab56e0cbeb8f71
