@@ -8,14 +8,19 @@ class Node
 private :
 	T item; // A data item
 	Node<T>* next; // Pointer to next node
+	int Priority;
 public :
 	Node();
 	Node( const T & r_Item);	//passing by const ref.
 	Node( const T & r_Item, Node<T>* nextNodePtr);
+	Node(const T& r_Item, const int& pr);
 	void setItem( const T & r_Item);
 	void setNext(Node<T>* nextNodePtr);
 	T getItem() const ;
 	Node<T>* getNext() const ;
+	void setPriority(const int& pr);
+	int getPriority() const;
+
 }; // end Node
 
 
@@ -38,6 +43,15 @@ Node<T>::Node( const T& r_Item, Node<T>* nextNodePtr)
 	item = r_Item;
 	next = nextNodePtr;
 }
+
+template < typename T>
+Node<T>::Node(const T& r_Item, const int& pr)
+{
+	item = r_Item;
+	Priority = pr;
+}
+
+
 template < typename T>
 void Node<T>::setItem( const T& r_Item)
 {
@@ -61,5 +75,18 @@ Node<T>* Node<T>::getNext() const
 {
 	return next;
 } 
+
+template < typename T>
+void Node<T>::setPriority(const int& pr)
+{
+	Priority = pr;
+}
+
+
+template < typename T>
+int Node<T>::getPriority() const
+{
+	return Priority;
+}
 
 #endif
