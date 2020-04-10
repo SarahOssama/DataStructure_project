@@ -65,3 +65,23 @@ void Order::SetServTime(int time)
 {
 	ServTime = time;
 }
+
+void Order::setSize(int s)
+{
+	Size = s;
+}
+
+int Order::getSize() const
+{
+	return Size;
+}
+
+void Order::settotalmoney(double m)
+{
+	totalMoney = m;
+}
+
+double Order::gettotalmoney() const
+{
+	return totalMoney;
+}
