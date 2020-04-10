@@ -1,7 +1,7 @@
 #ifndef __PriorityQUEUE_H_
 #define __PriorityQUEUE_H_
 #include "Node.h"
-class Order
+
 template <typename T>
 class PriorityQueue
 {
@@ -12,7 +12,7 @@ private:
 public:
 	PriorityQueue();
 	bool isEmpty() const;
-	bool enqueue(const T& newEntry, const int& priority);
+	bool enqueue(const T& newEntry);
 	bool dequeue(T& frntEntry);
 	bool peekFront(T& frntEntry)  const;
 	T* toArray(int& count);	//returns array of T (array if items)
@@ -47,9 +47,9 @@ Output: True if the operation is successful; otherwise false.
 */
 
 template <typename T>
-bool PriorityQueue<T>::enqueue(const T& newEntry, const int& priority)
+bool PriorityQueue<T>::enqueue(const T& newEntry)
 {
-	Node<T>* newNodePtr = new Node<T>(newEntry, priority);
+	Node<T>* newNodePtr = new Node<T>(newEntry);
 	// Insert the new node
 	if (isEmpty()) // The Priorityqueue is empty
 	{
