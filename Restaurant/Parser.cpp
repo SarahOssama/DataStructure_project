@@ -54,17 +54,28 @@ void Parser::ReadFile(int& nN, int& nG, int& nV, int& sN, int& sG, int& sV, int&
 		char* newstr = new char[25]; //used to ignore spaces
 		for (int i = 0; i < strlen(evtype_line); i++)
 		{
-			/*if (evtype_line[i] != ' ')
+			if (evtype_line[i] != ' '&&evtype_line[i]!='\n'&&evtype_line[i]!='\t')
 			{
-				//newstr[n] = evtype_line[i];
-				//n++;
+				newstr[n] = evtype_line[i];
+				n++;
 
-			}*/
-			s += evtype_line[i];
+			}
+			//s += evtype_line[i];
 			//s.
 		}
 		newstr[n] = '\0';
-
+		
+		/*char** f;
+		char* chars_array = strtok_s(evtype_line, " ", f);
+		while (chars_array)
+		{
+			puts(chars_array);
+			chars_array = strtok_s(NULL, " ", f);
+		}
+		for (int i = 0; i < strlen(chars_array); i++)
+		{
+			
+		}*/
 
 		switch (newstr[0])
 		{
