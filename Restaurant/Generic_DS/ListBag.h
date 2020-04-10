@@ -30,10 +30,10 @@ public:
 	}
 
 
-	bool AddNode(T it)   // Add item in the bag
+	void AddNode(T it)   // Add item in the bag
 	{
-		Node<T>* nptr = new Node <T>;
-		nptr->setItem(it);
+		Node<T>* nptr = new Node <T>(it);
+		//nptr->setItem(it);
 		if (Head == nullptr)
 			Head = nptr;
 		else
@@ -41,7 +41,7 @@ public:
 			nptr->setNext(Head);
 			Head = nptr;
 		}
-		return true;
+		return ;
 	}
 
 
@@ -115,17 +115,18 @@ public:
 		return Arr;
 	}
 
-	Node<T> FromInService_to_Finished()   //this function return a pointer to the first node in the In serv bag
+	Node<T>* FromInService_to_Finished()   //this function return a pointer to the first node in the In serv bag
 	{
 		Node<T>* ptr = Head;
-		while (Head)
-		{
-			Head = Head->getNext();
-			return (*ptr); 
-			/////////// modified by khadija... (was initially "T FromInService_to_Finished()")
-			//////////// and ( return (*ptr))
-			////// because it caused compilation error but i don't know if that will affect the fn or not?
-		}
+		//while (Head)
+		//{
+		//	Head = Head->getNext();
+		//	return (*ptr); 
+		//	/////////// modified by khadija... (was initially "T FromInService_to_Finished()")
+		//	//////////// and ( return (*ptr))
+		//	////// because it caused compilation error but i don't know if that will affect the fn or not?
+		//}
+		return (ptr);
 	}
 
 

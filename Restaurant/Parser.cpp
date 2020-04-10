@@ -81,7 +81,7 @@ void Parser::ReadFile(int& nN, int& nG, int& nV, int& sN, int& sG, int& sV, int&
 			{
 				OT = TYPE_VGAN;
 			}
-			TS = stoi(evtype_line_str[2]); /// runtime err bcz this an empty in the evtype_line_str.. el mafroud[2]?
+			TS = stoi(evtype_line_str[1]); /// runtime err bcz this an empty in the evtype_line_str.. el mafroud[2]?
 			id = stoi(evtype_line_str[2]);
 			size = stoi(evtype_line_str[3]);
 			money = stoi(evtype_line_str[4]);

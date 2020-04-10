@@ -345,7 +345,7 @@ void Restaurant::AddtoDemoQueue(Order *pOrd)
 
 void Restaurant::Interactive_mode()
 {
-	Restaurant* pRest = new Restaurant();
+	//Restaurant* pRest = ;
 	pGUI->PrintMessage("Welcome to the Interactive Mode !!...");
 	
 	Prsr = new Parser();
@@ -369,7 +369,7 @@ void Restaurant::Interactive_mode()
 	
 	if (Prsr->OpenFile(pGUI))
 	{
- 		Prsr->ReadFile(nNormal, nVegan, nVIP, spd_Nrm, spd_Vgn, spd_VIP, brk_o, brk_Nrm, brk_Vgn, brk_VIP, Autopromo, nEvnt, pRest);
+ 		Prsr->ReadFile(nNormal, nVegan, nVIP, spd_Nrm, spd_Vgn, spd_VIP, brk_o, brk_Nrm, brk_Vgn, brk_VIP, Autopromo, nEvnt, this);
 	}
 	//// Ids will not be repeated , as VIP are the most important we will assign to them the first set of Ids 
 	for (int i = 0; i < nVIP; i++)
@@ -467,11 +467,11 @@ void Restaurant::Interactive_mode()
 		//  when calling the filldrawing fn().. it will loop and draw also this array (ne5aliha te3mel keda ma3 eel tanyin !! ;) 
 
 		
-		while (In_Service_Orders_B.FromInService_to_Finished().getItem() !=nullptr)   // loop on In service bag to transfer orders from in serv to finished 
+		while (In_Service_Orders_B.FromInService_to_Finished()->getItem() !=nullptr)   // loop on In service bag to transfer orders from in serv to finished 
 		{
 			///// modified by khadija .. initially without ".getItem()" in while condition and line 466
 			///// because it gives compilation error .. it can not convert Node<order*> to order*
-			Order* ord= (In_Service_Orders_B.FromInService_to_Finished()).getItem();  
+			Order* ord= In_Service_Orders_B.FromInService_to_Finished()->getItem();  
 			if (CurrentTime == ord->GetServTime() + 5)
 			{
 				Order* temp = ord;
