@@ -49,6 +49,17 @@ public:
 	//
 	void setType(ORD_TYPE t); // in case we wanted to promote an order from normal to VIP
 	void SetServTime(int time);
+<<<<<<< HEAD
+
+	/*void setSize(int s);
+	int getSize() const;
+
+	void settotalmoney(double m);
+	double gettotalmoney() const;*/
+
+=======
+	int GetServTime();
+>>>>>>> d6f414ced929390e30f1323295ab56e0cbeb8f71
 };
 
 #endif
