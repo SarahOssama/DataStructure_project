@@ -58,25 +58,28 @@ void Restaurant::ExecuteEvents(int CurrentTimeStep)
 
 //Wrapper function for arrival event
 
-void Restaurant::Wrapper_Arrival(ORD_TYPE& r_Type, int& TS, int& id, int& size, int& mony, Event* pEv)
+void Restaurant::Wrapper_Arrival(ORD_TYPE& r_Type, int& TS, int& id, int& size, int& mony)
 {
-	pEv = new ArrivalEvent(TS, id, r_Type, mony, size);
-	EventsQueue.enqueue(pEv);
+	Event* pE;
+	pE = new ArrivalEvent(TS, id, r_Type, mony, size);
+	EventsQueue.enqueue(pE);
 }
 
 // Wrapper function for cancel event
 
-void Restaurant::Wrapper_Cancelation(int& TS, int& id, Event* pEv)
+void Restaurant::Wrapper_Cancelation(int& TS, int& id)
 {
-	pEv = new CancelEvent(TS, id);
-	EventsQueue.enqueue(pEv);
+	Event* pE;
+	pE = new CancelEvent(TS, id);
+	EventsQueue.enqueue(pE);
 }
 // Wrapper function promotion event
 
-void Restaurant::Wrapper_Promote(int& TS, int& id, int& exmony, Event* pEv)
+void Restaurant::Wrapper_Promote(int& TS, int& id, int& exmony)
 {
-	pEv = new PromotionEvent(TS,id,exmony);
-	EventsQueue.enqueue(pEv);
+	Event* pE;
+	pE = new PromotionEvent(TS,id,exmony);
+	EventsQueue.enqueue(pE);
 }
 
 
@@ -342,6 +345,7 @@ void Restaurant::AddtoDemoQueue(Order *pOrd)
 
 void Restaurant::Interactive_mode()
 {
+	Restaurant* pRest = new Restaurant();
 	pGUI->PrintMessage("Welcome to the Interactive Mode !!...");
 	
 	Prsr = new Parser();
@@ -354,8 +358,8 @@ void Restaurant::Interactive_mode()
 	int Autopromo; // limit for autopromotion
 	int nEvnt;// number of events
 
-	Restaurant* pRest= new Restaurant();
-	Event* pEv = nullptr;
+	
+	//Event* pEv = nullptr;
 	Order* pOrder;
 	Cook* pCook;
 
@@ -365,7 +369,7 @@ void Restaurant::Interactive_mode()
 	
 	if (Prsr->OpenFile(pGUI))
 	{
- 		Prsr->ReadFile(nNormal, nVegan, nVIP, spd_Nrm, spd_Vgn, spd_VIP, brk_o, brk_Nrm, brk_Vgn, brk_VIP, Autopromo, nEvnt, pRest, pEv);
+ 		Prsr->ReadFile(nNormal, nVegan, nVIP, spd_Nrm, spd_Vgn, spd_VIP, brk_o, brk_Nrm, brk_Vgn, brk_VIP, Autopromo, nEvnt, pRest);
 	}
 	//// Ids will not be repeated , as VIP are the most important we will assign to them the first set of Ids 
 	for (int i = 0; i < nVIP; i++)
@@ -394,7 +398,10 @@ void Restaurant::Interactive_mode()
 	int CurrentTime = 1;
 	//print current timestep
 	char timestep[10];
-	
+	FillDrawingList();
+	pGUI->UpdateInterface();
+	pGUI->PrintMessage("Please click to continue..");
+	pGUI->waitForClick();
 
 	while (!EventsQueue.isEmpty() || !In_Service_Orders_B.IsEmpty()) // we cannot check by (IsEmpty()) fn
 																	 // as the bag will also contain finished orders

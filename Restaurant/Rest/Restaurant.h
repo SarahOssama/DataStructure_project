@@ -75,9 +75,9 @@ public:
 	//// As the restaurant class will be the responsible of taking any precautions before calling the event_constructors
 	////////////////////////////////////////////////
 
-	void Wrapper_Arrival(ORD_TYPE& r_Type, int& TS, int& id, int& size, int& mony, Event* pEv);
-	void Wrapper_Cancelation(int& TS, int& id, Event* pEv);
-	void Wrapper_Promote(int &TS, int& id, int& exmony,Event* pEv);
+	void Wrapper_Arrival(ORD_TYPE& r_Type, int& TS, int& id, int& size, int& mony);
+	void Wrapper_Cancelation(int& TS, int& id);
+	void Wrapper_Promote(int &TS, int& id, int& exmony);
 	
 
 

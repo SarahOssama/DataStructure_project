@@ -21,6 +21,6 @@ public:
 	Parser();
 	void setFileName(string fn);
 	bool OpenFile(GUI* pGUI);
-	void ReadFile(int& nN, int& nG, int& nV, int& sN, int& sG, int& sV, int& bo, int& bN, int& bG, int& bV, int& AutoP, int& M, Restaurant* pRest,Event*pEv);
+	void ReadFile(int& nN, int& nG, int& nV, int& sN, int& sG, int& sV, int& bo, int& bN, int& bG, int& bV, int& AutoP, int& M, Restaurant* pRest);
 };
 
