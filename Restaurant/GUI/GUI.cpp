@@ -79,11 +79,11 @@ void GUI::PrintMessage(string msg) const	//Prints a message on status bar
 	switch (indicator)
 	{
 	case 1:
-		pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.1), msg);
+		pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.2), msg);
 		ptr->indicator++;
 		break;
 	case 2:
-		pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.4), msg);
+		pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.5), msg);
 		ptr->indicator++;
 		break;
 	case 3:
