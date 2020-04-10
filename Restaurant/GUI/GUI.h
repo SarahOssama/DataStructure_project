@@ -113,7 +113,7 @@ public:
 	// Input Functions  ---------------------------
 	void waitForClick() const;	// waits a user click from the user
 	string GetString() const ; // reads a string (keyboard input) from the user
-
+	void StringPrintMessage(string msg) const;//only for Getstring Use  DON"T USE IT
 	// Output Functions  ---------------------------
 	void PrintMessage(string msg) const; // prints a message in the status bar
 
