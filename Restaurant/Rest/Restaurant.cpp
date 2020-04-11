@@ -106,6 +106,11 @@ void Restaurant::FillDrawingList()
 		pGUI->AddToDrawingList(pCook[i]);
 	}
 	
+	pCook = Cook_N_Q.toArray(size);
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pCook[i]);
+	}
 	pCook = Cook_G_Q.toArray(size); // inside the "toArray" fn it initiates size =0 by itself
 	                                       // no need to make another counter to avoid problems in array dimension
 	for (int i = 0; i < size; i++)
@@ -113,11 +118,7 @@ void Restaurant::FillDrawingList()
 		pGUI->AddToDrawingList(pCook[i]);
 	}
 	
-	pCook = Cook_N_Q.toArray(size); 
-	for (int i = 0; i < size; i++)
-	{
-		pGUI->AddToDrawingList(pCook[i]);
-	}
+	
 	//// it loops on each array look for the available cooks and draw them..
 	//// all cooks in those arrays are not busy (cooks from the queues are the available ones )
 	//// all busy cooks(in break or have orders) are stored in the linked bag .
@@ -147,6 +148,11 @@ void Restaurant::FillDrawingList()
 		pGUI->AddToDrawingList(pOrder[i]);
 	}
 
+	pOrder = Finished_Orders_B.toArray(size);
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pOrder[i]);
+	}
 }
 
  
@@ -398,10 +404,11 @@ void Restaurant::Interactive_mode()
 	int CurrentTime = 1;
 	//print current timestep
 	char timestep[10];
-	FillDrawingList();
+	/*FillDrawingList();
 	pGUI->UpdateInterface();
 	pGUI->PrintMessage("Please click to continue..");
-	pGUI->waitForClick();
+	pGUI->waitForClick();*/
+	char FromIntToChar[4], FromIntToCharV[4], FromIntToCharG[4], FromIntToCharN[4];
 
 	while (!EventsQueue.isEmpty() || !In_Service_Orders_B.IsEmpty()) // we cannot check by (IsEmpty()) fn
 																	 // as the bag will also contain finished orders
@@ -409,10 +416,10 @@ void Restaurant::Interactive_mode()
 																	 //problem and it's better for complexity to make another list
 	{
 		itoa(CurrentTime, timestep, 10);
-		string TSmsg = "Current TS =";
-		TSmsg += timestep;
-		pGUI->PrintMessage(TSmsg);
-
+		string TSmsg = "Current TS = ";
+		/*TSmsg += timestep;*/
+		pGUI->PrintMessage(TSmsg+=timestep);
+		
 
 		ExecuteEvents(CurrentTime);
 
@@ -508,6 +515,38 @@ void Restaurant::Interactive_mode()
 		
 		FillDrawingList();
 		pGUI->UpdateInterface();
+
+		//char FromIntToChar[4], FromIntToCharV[4], FromIntToCharG[4], FromIntToCharN[4];
+		Order** arr_Vord,** arr_Gord, **arr_Nord;
+		int Count_O_V=0, Count_O_G=0, Count_O_N=0;
+		arr_Vord =VIPOrder_Q.toArray(Count_O_V);
+		arr_Gord = VeganOrder_Q.toArray(Count_O_G);
+		arr_Nord = NormalOrder_L.toArray(Count_O_N);
+
+		string Waiting_Orders_msg = "Waiting VIP Orders = ";
+		Waiting_Orders_msg.append(itoa(Count_O_V, FromIntToCharV, 4));
+
+		Waiting_Orders_msg.append(", Waiting Vegan Orders = ");
+		Waiting_Orders_msg.append(itoa(Count_O_G, FromIntToCharG, 4));
+
+		Waiting_Orders_msg.append(", Waiting Normal Orders = ");
+		Waiting_Orders_msg.append(itoa(Count_O_N, FromIntToCharN, 4));
+
+		pGUI->PrintMessage(Waiting_Orders_msg);
+
+		string Available_cooks_msg = "Available VIP cooks = ";
+		Available_cooks_msg.append( itoa(nVIP, FromIntToChar,4) );
+
+		Available_cooks_msg.append(", Available Vegan cooks = ");
+		Available_cooks_msg.append(itoa(nVegan, FromIntToChar, 4));
+
+		Available_cooks_msg.append(", Available Normal cooks = ");
+		Available_cooks_msg.append(itoa(nNormal, FromIntToChar, 4));
+
+		pGUI->PrintMessage(Available_cooks_msg );
+
+		
+
 		pGUI->PrintMessage("Please click to continue..");
 		pGUI->waitForClick();
 		CurrentTime++;
