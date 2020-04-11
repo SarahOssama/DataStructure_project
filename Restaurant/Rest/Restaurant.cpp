@@ -468,7 +468,7 @@ void Restaurant::Interactive_mode()
 		//////or maybe doing another bag for finished orders and then avoid looping ?? 
 		//  when calling the filldrawing fn().. it will loop and draw also this array (ne5aliha te3mel keda ma3 eel tanyin !! ;) 
 		
-		while (In_Service_Orders_B.FromInService_to_Finished())// gives me a ptr to head .. 
+		/*while (In_Service_Orders_B.FromInService_to_Finished())// gives me a ptr to head .. 
 			                                                   // if the head ==nullptr ..then the bag is empty..will not enter the while loop
 		{
 			if (In_Service_Orders_B.FromInService_to_Finished()->getItem() != nullptr)   // loop on In service bag to transfer orders from in serv to finished 
@@ -485,8 +485,25 @@ void Restaurant::Interactive_mode()
 				}
 
 			}
-			In_Service_Orders_B.FromInService_to_Finished()->getNext();
+			
+			
+			//In_Service_Orders_B.FromInService_to_Finished()->getNext();
 
+		}*/
+		Order** arr_ord;
+		int count = 0;
+		if (!In_Service_Orders_B.IsEmpty())
+		{
+			arr_ord=In_Service_Orders_B.toArray(count);
+			for (int i = 0; i < count; i++)
+			{
+				if (CurrentTime == arr_ord[i]->GetServTime() + 5)
+				{
+					arr_ord[i]->setStatus(DONE);
+					Finished_Orders_B.AddNode(arr_ord[i]);
+					In_Service_Orders_B.RemoveNode(arr_ord[i]);
+				}
+			}
 		}
 		
 		FillDrawingList();
