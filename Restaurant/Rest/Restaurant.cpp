@@ -403,22 +403,22 @@ void Restaurant::Interactive_mode()
 
 	int CurrentTime = 1;
 	//print current timestep
-	char timestep[10];
+	//char timestep[10];
 	/*FillDrawingList();
 	pGUI->UpdateInterface();
 	pGUI->PrintMessage("Please click to continue..");
 	pGUI->waitForClick();*/
-	char FromIntToChar[4], FromIntToCharV[4], FromIntToCharG[4], FromIntToCharN[4];
+	
 
 	while (!EventsQueue.isEmpty() || !In_Service_Orders_B.IsEmpty()) // we cannot check by (IsEmpty()) fn
 																	 // as the bag will also contain finished orders
 																	 // so we made another list for finished orders to solve this 
 																	 //problem and it's better for complexity to make another list
 	{
-		itoa(CurrentTime, timestep, 10);
+		//itoa(CurrentTime, timestep, 10);
 		string TSmsg = "Current TS = ";
 		/*TSmsg += timestep;*/
-		pGUI->PrintMessage(TSmsg+=timestep);
+		pGUI->PrintMessage(TSmsg+ to_string(CurrentTime));
 		
 
 		ExecuteEvents(CurrentTime);
@@ -524,24 +524,24 @@ void Restaurant::Interactive_mode()
 		arr_Nord = NormalOrder_L.toArray(Count_O_N);
 
 		string Waiting_Orders_msg = "Waiting VIP Orders = ";
-		Waiting_Orders_msg.append(itoa(Count_O_V, FromIntToCharV, 4));
+		Waiting_Orders_msg.append(to_string(Count_O_V));
 
 		Waiting_Orders_msg.append(", Waiting Vegan Orders = ");
-		Waiting_Orders_msg.append(itoa(Count_O_G, FromIntToCharG, 4));
+		Waiting_Orders_msg.append(to_string(Count_O_G));
 
 		Waiting_Orders_msg.append(", Waiting Normal Orders = ");
-		Waiting_Orders_msg.append(itoa(Count_O_N, FromIntToCharN, 4));
+		Waiting_Orders_msg.append(to_string(Count_O_N));
 
 		pGUI->PrintMessage(Waiting_Orders_msg);
 
 		string Available_cooks_msg = "Available VIP cooks = ";
-		Available_cooks_msg.append( itoa(nVIP, FromIntToChar,4) );
+		Available_cooks_msg.append(to_string(nVIP));
 
 		Available_cooks_msg.append(", Available Vegan cooks = ");
-		Available_cooks_msg.append(itoa(nVegan, FromIntToChar, 4));
+		Available_cooks_msg.append(to_string(nVegan));
 
 		Available_cooks_msg.append(", Available Normal cooks = ");
-		Available_cooks_msg.append(itoa(nNormal, FromIntToChar, 4));
+		Available_cooks_msg.append(to_string(nNormal));
 
 		pGUI->PrintMessage(Available_cooks_msg );
 
