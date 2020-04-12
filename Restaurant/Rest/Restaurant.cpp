@@ -57,7 +57,6 @@ void Restaurant::ExecuteEvents(int CurrentTimeStep)
 
 
 //Wrapper function for arrival event
-
 void Restaurant::Wrapper_Arrival(ORD_TYPE& r_Type, int& TS, int& id, int& size, int& mony)
 {
 	Event* pE;
@@ -66,15 +65,14 @@ void Restaurant::Wrapper_Arrival(ORD_TYPE& r_Type, int& TS, int& id, int& size, 
 }
 
 // Wrapper function for cancel event
-
 void Restaurant::Wrapper_Cancelation(int& TS, int& id)
 {
 	Event* pE;
 	pE = new CancelEvent(TS, id);
 	EventsQueue.enqueue(pE);
 }
-// Wrapper function promotion event
 
+// Wrapper function promotion event
 void Restaurant::Wrapper_Promote(int& TS, int& id, int& exmony)
 {
 	Event* pE;
