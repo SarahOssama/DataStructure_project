@@ -22,7 +22,7 @@ public :
 	Node<T>* getNext() const ;
 	void setPriority(Order* o);
 	int getPriority() const;
-
+	void Get_next_of();
 }; // end Node
 
 
@@ -83,5 +83,13 @@ int Node<T>::getPriority() const
 {
 	return Priority;
 }
+/*template < typename T>
+void Node<T>::Get_next_of()
+{
+	if (this)
+	{
+		this = this->getNext();
+	}
+}*/
 
 #endif

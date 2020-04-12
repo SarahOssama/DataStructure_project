@@ -57,7 +57,6 @@ void Restaurant::ExecuteEvents(int CurrentTimeStep)
 
 
 //Wrapper function for arrival event
-
 void Restaurant::Wrapper_Arrival(ORD_TYPE& r_Type, int& TS, int& id, int& size, int& mony)
 {
 	Event* pE;
@@ -66,15 +65,14 @@ void Restaurant::Wrapper_Arrival(ORD_TYPE& r_Type, int& TS, int& id, int& size, 
 }
 
 // Wrapper function for cancel event
-
 void Restaurant::Wrapper_Cancelation(int& TS, int& id)
 {
 	Event* pE;
 	pE = new CancelEvent(TS, id);
 	EventsQueue.enqueue(pE);
 }
-// Wrapper function promotion event
 
+// Wrapper function promotion event
 void Restaurant::Wrapper_Promote(int& TS, int& id, int& exmony)
 {
 	Event* pE;
@@ -106,6 +104,11 @@ void Restaurant::FillDrawingList()
 		pGUI->AddToDrawingList(pCook[i]);
 	}
 	
+	pCook = Cook_N_Q.toArray(size);
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pCook[i]);
+	}
 	pCook = Cook_G_Q.toArray(size); // inside the "toArray" fn it initiates size =0 by itself
 	                                       // no need to make another counter to avoid problems in array dimension
 	for (int i = 0; i < size; i++)
@@ -113,11 +116,7 @@ void Restaurant::FillDrawingList()
 		pGUI->AddToDrawingList(pCook[i]);
 	}
 	
-	pCook = Cook_N_Q.toArray(size); 
-	for (int i = 0; i < size; i++)
-	{
-		pGUI->AddToDrawingList(pCook[i]);
-	}
+	
 	//// it loops on each array look for the available cooks and draw them..
 	//// all cooks in those arrays are not busy (cooks from the queues are the available ones )
 	//// all busy cooks(in break or have orders) are stored in the linked bag .
@@ -147,6 +146,11 @@ void Restaurant::FillDrawingList()
 		pGUI->AddToDrawingList(pOrder[i]);
 	}
 
+	pOrder = Finished_Orders_B.toArray(size);
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pOrder[i]);
+	}
 }
 
  
@@ -397,20 +401,23 @@ void Restaurant::Interactive_mode()
 
 	int CurrentTime = 1;
 	//print current timestep
-	char timestep[10];
-	FillDrawingList();
+	//char timestep[10];
+	/*FillDrawingList();
 	pGUI->UpdateInterface();
 	pGUI->PrintMessage("Please click to continue..");
-	pGUI->waitForClick();
+	pGUI->waitForClick();*/
+	
 
 	while (!EventsQueue.isEmpty() || !In_Service_Orders_B.IsEmpty()) // we cannot check by (IsEmpty()) fn
 																	 // as the bag will also contain finished orders
 																	 // so we made another list for finished orders to solve this 
 																	 //problem and it's better for complexity to make another list
 	{
-		itoa(CurrentTime, timestep, 10);
-		pGUI->PrintMessage(timestep);
-
+		//itoa(CurrentTime, timestep, 10);
+		string TSmsg = "Current TS = ";
+		/*TSmsg += timestep;*/
+		pGUI->PrintMessage(TSmsg+ to_string(CurrentTime));
+		
 
 		ExecuteEvents(CurrentTime);
 
@@ -465,26 +472,79 @@ void Restaurant::Interactive_mode()
 		//////the bag of orders will  also contain finished orders.. think of doing another fn to loop if there still smth in service??
 		//////or maybe doing another bag for finished orders and then avoid looping ?? 
 		//  when calling the filldrawing fn().. it will loop and draw also this array (ne5aliha te3mel keda ma3 eel tanyin !! ;) 
-
 		
-		while (In_Service_Orders_B.FromInService_to_Finished()->getItem() !=nullptr)   // loop on In service bag to transfer orders from in serv to finished 
+		/*while (In_Service_Orders_B.FromInService_to_Finished())// gives me a ptr to head .. 
+			                                                   // if the head ==nullptr ..then the bag is empty..will not enter the while loop
 		{
-			///// modified by khadija .. initially without ".getItem()" in while condition and line 466
-			///// because it gives compilation error .. it can not convert Node<order*> to order*
-			Order* ord= In_Service_Orders_B.FromInService_to_Finished()->getItem();  
-			if (CurrentTime == ord->GetServTime() + 5)
+			if (In_Service_Orders_B.FromInService_to_Finished()->getItem() != nullptr)   // loop on In service bag to transfer orders from in serv to finished 
 			{
-				Order* temp = ord;
-				Finished_Orders_B.AddNode(ord);
-				ord->setStatus(DONE);
-				delete temp;
+				///// modified by khadija .. initially without ".getItem()" in while condition and line 466
+				///// because it gives compilation error .. it can not convert Node<order*> to order*
+				Order* ord = In_Service_Orders_B.FromInService_to_Finished()->getItem();
+				if (CurrentTime == ord->GetServTime() + 5)
+				{
+					Order* temp = ord;
+					Finished_Orders_B.AddNode(ord);
+					ord->setStatus(DONE);
+					delete temp;
+				}
+
 			}
 			
-		}
+			
+			//In_Service_Orders_B.FromInService_to_Finished()->getNext();
 
+		}*/
+		Order** arr_ord;
+		int count = 0;
+		if (!In_Service_Orders_B.IsEmpty())
+		{
+			arr_ord=In_Service_Orders_B.toArray(count);
+			for (int i = 0; i < count; i++)
+			{
+				if (CurrentTime == arr_ord[i]->GetServTime() + 5)
+				{
+					arr_ord[i]->setStatus(DONE);
+					Finished_Orders_B.AddNode(arr_ord[i]);
+					In_Service_Orders_B.RemoveNode(arr_ord[i]);
+				}
+			}
+		}
 		
 		FillDrawingList();
 		pGUI->UpdateInterface();
+
+		//char FromIntToChar[4], FromIntToCharV[4], FromIntToCharG[4], FromIntToCharN[4];
+		Order** arr_Vord,** arr_Gord, **arr_Nord;
+		int Count_O_V=0, Count_O_G=0, Count_O_N=0;
+		arr_Vord =VIPOrder_Q.toArray(Count_O_V);
+		arr_Gord = VeganOrder_Q.toArray(Count_O_G);
+		arr_Nord = NormalOrder_L.toArray(Count_O_N);
+
+		string Waiting_Orders_msg = "Waiting VIP Orders = ";
+		Waiting_Orders_msg.append(to_string(Count_O_V));
+
+		Waiting_Orders_msg.append(", Waiting Vegan Orders = ");
+		Waiting_Orders_msg.append(to_string(Count_O_G));
+
+		Waiting_Orders_msg.append(", Waiting Normal Orders = ");
+		Waiting_Orders_msg.append(to_string(Count_O_N));
+
+		pGUI->PrintMessage(Waiting_Orders_msg);
+
+		string Available_cooks_msg = "Available VIP cooks = ";
+		Available_cooks_msg.append(to_string(nVIP));
+
+		Available_cooks_msg.append(", Available Vegan cooks = ");
+		Available_cooks_msg.append(to_string(nVegan));
+
+		Available_cooks_msg.append(", Available Normal cooks = ");
+		Available_cooks_msg.append(to_string(nNormal));
+
+		pGUI->PrintMessage(Available_cooks_msg );
+
+		
+
 		pGUI->PrintMessage("Please click to continue..");
 		pGUI->waitForClick();
 		CurrentTime++;

@@ -214,7 +214,7 @@ public:
 			{
 				Head = P->getNext();
 				delete P;
-				cout << "Now the list is empty" << endl;
+				//cout << "Now the list is empty" << endl;
 				return true;
 			}
 			if (P->getNext()->getItem() == value)

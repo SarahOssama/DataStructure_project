@@ -45,14 +45,31 @@ string GUI::GetString() const
 		if(Key == 27 )	//ESCAPE key is pressed
 			return "";	//returns nothing as user has cancelled label
 		if(Key == 13 )	//ENTER key is pressed
+		{
+			ClearStatusBar();
 			return Label;
+			
+		}
+			
+					
 		if((Key == 8) && (Label.size() >= 1))	//BackSpace is pressed
 			Label.resize(Label.size() -1 );			
 		else
 			Label += Key;
+
+		StringPrintMessage(Label);
 		
-		PrintMessage(Label);
 	}
+	
+}
+void GUI::StringPrintMessage(string msg) const
+{
+	ClearStatusBar();//First clear the status bar
+	pWind->SetPen(DARKRED);
+	pWind->SetFont(18, BOLD, BY_NAME, "Arial");
+	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.2), msg);
+	GUI* ptr = const_cast<GUI*> (this);
+	ptr->indicator = 1;
 }
 
 
