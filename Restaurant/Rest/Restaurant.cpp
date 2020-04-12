@@ -2,9 +2,11 @@
 #include <time.h>
 #include <iostream>
 using namespace std;
-
 #include "Restaurant.h"
 #include "..\Events\ArrivalEvent.h"
+#include "..\Events\CancelEvent.h"
+#include"..\Events\PromotionEvent.h"
+#include"..\Parser.h"
 
 
 Restaurant::Restaurant() 
@@ -20,6 +22,7 @@ void Restaurant::RunSimulation()
 	switch (mode)	//Add a function for each mode in next phases
 	{
 	case MODE_INTR:
+		Interactive_mode();
 		break;
 	case MODE_STEP:
 		break;
@@ -53,6 +56,32 @@ void Restaurant::ExecuteEvents(int CurrentTimeStep)
 }
 
 
+//Wrapper function for arrival event
+void Restaurant::Wrapper_Arrival(ORD_TYPE& r_Type, int& TS, int& id, int& size, int& mony)
+{
+	Event* pE;
+	pE = new ArrivalEvent(TS, id, r_Type, mony, size);
+	EventsQueue.enqueue(pE);
+}
+
+// Wrapper function for cancel event
+void Restaurant::Wrapper_Cancelation(int& TS, int& id)
+{
+	Event* pE;
+	pE = new CancelEvent(TS, id);
+	EventsQueue.enqueue(pE);
+}
+
+// Wrapper function promotion event
+void Restaurant::Wrapper_Promote(int& TS, int& id, int& exmony)
+{
+	Event* pE;
+	pE = new PromotionEvent(TS,id,exmony);
+	EventsQueue.enqueue(pE);
+}
+
+
+
 Restaurant::~Restaurant()
 {
 		if (pGUI)
@@ -66,10 +95,132 @@ void Restaurant::FillDrawingList()
 	//It should get orders from orders lists/queues/stacks/whatever (same for Cooks)
 	//To add orders it should call function  void GUI::AddToDrawingList(Order* pOrd);
 	//To add Cooks it should call function  void GUI::AddToDrawingList(Cook* pCc);
+	int size = 0;
+	Cook** pCook;
 
+	pCook= Cook_V_Q.toArray(size);
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pCook[i]);
+	}
+	
+	pCook = Cook_N_Q.toArray(size);
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pCook[i]);
+	}
+	pCook = Cook_G_Q.toArray(size); // inside the "toArray" fn it initiates size =0 by itself
+	                                       // no need to make another counter to avoid problems in array dimension
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pCook[i]);
+	}
+	
+	
+	//// it loops on each array look for the available cooks and draw them..
+	//// all cooks in those arrays are not busy (cooks from the queues are the available ones )
+	//// all busy cooks(in break or have orders) are stored in the linked bag .
+
+	Order** pOrder;
+
+	pOrder= VIPOrder_Q.toArray(size);
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pOrder[i]);
+	}
+    
+	pOrder = VeganOrder_Q.toArray(size);
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pOrder[i]);
+	}
+	
+	pOrder = NormalOrder_L.toArray(size);
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pOrder[i]);
+	}
+	pOrder = In_Service_Orders_B.toArray(size);
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pOrder[i]);
+	}
+
+	pOrder = Finished_Orders_B.toArray(size);
+	for (int i = 0; i < size; i++)
+	{
+		pGUI->AddToDrawingList(pOrder[i]);
+	}
+}
+
+ 
+//to delete any order  will technically do the same in each type
+bool Restaurant::DeleteOrder(int ID)
+{
+	Order* pOrder = NormalOrder_L.GetOrderFromID(ID);     //to look for the Order to be deleted
+	if (pOrder)
+	{
+		ORD_STATUS status = pOrder->getStatus();
+
+		if (status == WAIT)
+			return NormalOrder_L.DeleteNode(pOrder); // To delete the Order (esm funny keda)
+
+	}
+	return false;
 }
 
 
+//Adding order to a queue
+void Restaurant::AddtoQueue(Order* pOrder)
+{
+	ORD_TYPE type = pOrder->GetType();
+	
+
+	switch (type)
+	{
+	case TYPE_NRM:
+
+		NormalOrder_L.InsertEnd(pOrder);
+
+		break;
+
+	case TYPE_VGAN:
+
+		VeganOrder_Q.enqueue(pOrder);
+
+		break;
+
+	case TYPE_VIP:
+
+			VIPOrder_Q.enqueue(pOrder);
+	
+		break;
+
+	default:
+
+		return ;
+
+	}
+	
+}
+
+
+void Restaurant:: PromoteOrder(int ID)
+{
+	Order* pOrder = NormalOrder_L.GetOrderFromID(ID);
+	if (pOrder)
+	{
+		Order* TempOrder = pOrder;
+		pOrder->setType(TYPE_VIP);
+		AddtoQueue(pOrder);
+		bool deleted = NormalOrder_L.DeleteNode(TempOrder);
+
+	}
+		
+		
+	
+	                  
+}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -194,5 +345,215 @@ void Restaurant::AddtoDemoQueue(Order *pOrd)
 
 /// ==> end of DEMO-related function
 //////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////Interactive mode function////////////////////////////////////
 
+void Restaurant::Interactive_mode()
+{
+	//Restaurant* pRest = ;
+	pGUI->PrintMessage("Welcome to the Interactive Mode !!...");
+	
+	Prsr = new Parser();
+	int nNormal = 0;
+	int nVegan = 0;
+	int nVIP = 0; // Number of normal , vegan , vip cooks
+	int spd_Nrm, spd_Vgn, spd_VIP; //Speed of each type of cooks
+	int brk_o; // Number of dishes that a cook must finish before break
+	int brk_Nrm, brk_Vgn, brk_VIP;  // break period in timesteps
+	int Autopromo; // limit for autopromotion
+	int nEvnt;// number of events
+
+	
+	//Event* pEv = nullptr;
+	Order* pOrder;
+	Cook* pCook;
+
+	int cook_count; // number of all cooks in the restaurant
+	cook_count = nNormal + nVegan + nVIP;
+	int cID = 0;
+	
+	if (Prsr->OpenFile(pGUI))
+	{
+ 		Prsr->ReadFile(nNormal, nVegan, nVIP, spd_Nrm, spd_Vgn, spd_VIP, brk_o, brk_Nrm, brk_Vgn, brk_VIP, Autopromo, nEvnt, this);
+	}
+	//// Ids will not be repeated , as VIP are the most important we will assign to them the first set of Ids 
+	for (int i = 0; i < nVIP; i++)
+	{
+		cID++;
+		pCook = new Cook(cID,TYPE_VIP,spd_VIP,brk_o,brk_VIP);
+		Cook_V_Q.enqueue(pCook);
+	}
+
+	for (int i = 0; i < nNormal; i++)
+	{
+		cID++;
+		pCook = new Cook(cID, TYPE_NRM, spd_Nrm, brk_o, brk_Nrm);
+		Cook_N_Q.enqueue(pCook);
+
+	}
+	for (int i = 0; i < nVegan; i++)
+	{
+		cID++;
+		pCook = new Cook(cID, TYPE_VGAN, spd_Vgn, brk_o, brk_Vgn);
+		Cook_G_Q.enqueue(pCook);
+	}
+
+	
+
+	int CurrentTime = 1;
+	//print current timestep
+	//char timestep[10];
+	/*FillDrawingList();
+	pGUI->UpdateInterface();
+	pGUI->PrintMessage("Please click to continue..");
+	pGUI->waitForClick();*/
+	
+
+	while (!EventsQueue.isEmpty() || !In_Service_Orders_B.IsEmpty()) // we cannot check by (IsEmpty()) fn
+																	 // as the bag will also contain finished orders
+																	 // so we made another list for finished orders to solve this 
+																	 //problem and it's better for complexity to make another list
+	{
+		//itoa(CurrentTime, timestep, 10);
+		string TSmsg = "Current TS = ";
+		/*TSmsg += timestep;*/
+		pGUI->PrintMessage(TSmsg+ to_string(CurrentTime));
+		
+
+		ExecuteEvents(CurrentTime);
+
+
+
+		//FillDrawingList();   filldrawinglist fn does not draw items ..
+		// it just fills the "drawing list" by items to be drawn when calling the "update interface fn"
+		// then no need to call it more than once in a loop
+		// or we can think another way.. fill the drawing list by orders just arrived before picking and blabla
+		// then update the interface .. then reset drawinglist and fill it another time after picking 
+		// but this way it will be called twice .. shoufi keda ra2yyek eih ?
+
+
+		//b) Pick one order from each order type and move it to In service  List
+		Order* VIPOrder_picked;
+		Order* NormalOrder_picked;
+		Order* VeganOrder_picked;
+
+		bool VIPorder = VIPOrder_Q.dequeue(VIPOrder_picked);
+		bool Normalorder = NormalOrder_L.GetfirstNode(NormalOrder_picked);
+		bool Veganorder = VeganOrder_Q.dequeue(VeganOrder_picked);
+
+		if (VIPorder)
+		{
+			VIPOrder_picked->setStatus(SRV);
+			In_Service_Orders_B.AddNode(VIPOrder_picked); // we added the order to the in service list
+			VIPOrder_picked->SetServTime(CurrentTime);    // we set the servTime to the cuurent time 
+		}
+		if (Normalorder)
+		{
+			NormalOrder_picked->setStatus(SRV);
+			In_Service_Orders_B.AddNode(NormalOrder_picked); // we added the order to the in service list
+			NormalOrder_picked->SetServTime(CurrentTime);   // we set the servTime to the cuurent time 
+		}
+		if (Veganorder)
+		{
+			VeganOrder_picked->setStatus(SRV);
+			In_Service_Orders_B.AddNode(VeganOrder_picked);   // we added the order to the in service list
+			VeganOrder_picked->SetServTime(CurrentTime);      // we set the servTime to the cuurent time 
+		}
+
+		
+
+
+		// 1- create array using bag interface
+		// it will be a data member in the restaurant class (in service/finished orders)
+		// 2- add a data member in order named serviced time and set it with the current time 
+
+		// 3- then looping on the array to check if serviced time +5 = current time 
+		//   if yes change it's status from srv to finished 
+		//////NOTE... this loop will be infinite loop as is empty will never be true 
+		//////the bag of orders will  also contain finished orders.. think of doing another fn to loop if there still smth in service??
+		//////or maybe doing another bag for finished orders and then avoid looping ?? 
+		//  when calling the filldrawing fn().. it will loop and draw also this array (ne5aliha te3mel keda ma3 eel tanyin !! ;) 
+		
+		/*while (In_Service_Orders_B.FromInService_to_Finished())// gives me a ptr to head .. 
+			                                                   // if the head ==nullptr ..then the bag is empty..will not enter the while loop
+		{
+			if (In_Service_Orders_B.FromInService_to_Finished()->getItem() != nullptr)   // loop on In service bag to transfer orders from in serv to finished 
+			{
+				///// modified by khadija .. initially without ".getItem()" in while condition and line 466
+				///// because it gives compilation error .. it can not convert Node<order*> to order*
+				Order* ord = In_Service_Orders_B.FromInService_to_Finished()->getItem();
+				if (CurrentTime == ord->GetServTime() + 5)
+				{
+					Order* temp = ord;
+					Finished_Orders_B.AddNode(ord);
+					ord->setStatus(DONE);
+					delete temp;
+				}
+
+			}
+			
+			
+			//In_Service_Orders_B.FromInService_to_Finished()->getNext();
+
+		}*/
+		Order** arr_ord;
+		int count = 0;
+		if (!In_Service_Orders_B.IsEmpty())
+		{
+			arr_ord=In_Service_Orders_B.toArray(count);
+			for (int i = 0; i < count; i++)
+			{
+				if (CurrentTime == arr_ord[i]->GetServTime() + 5)
+				{
+					arr_ord[i]->setStatus(DONE);
+					Finished_Orders_B.AddNode(arr_ord[i]);
+					In_Service_Orders_B.RemoveNode(arr_ord[i]);
+				}
+			}
+		}
+		
+		FillDrawingList();
+		pGUI->UpdateInterface();
+
+		//char FromIntToChar[4], FromIntToCharV[4], FromIntToCharG[4], FromIntToCharN[4];
+		Order** arr_Vord,** arr_Gord, **arr_Nord;
+		int Count_O_V=0, Count_O_G=0, Count_O_N=0;
+		arr_Vord =VIPOrder_Q.toArray(Count_O_V);
+		arr_Gord = VeganOrder_Q.toArray(Count_O_G);
+		arr_Nord = NormalOrder_L.toArray(Count_O_N);
+
+		string Waiting_Orders_msg = "Waiting VIP Orders = ";
+		Waiting_Orders_msg.append(to_string(Count_O_V));
+
+		Waiting_Orders_msg.append(", Waiting Vegan Orders = ");
+		Waiting_Orders_msg.append(to_string(Count_O_G));
+
+		Waiting_Orders_msg.append(", Waiting Normal Orders = ");
+		Waiting_Orders_msg.append(to_string(Count_O_N));
+
+		pGUI->PrintMessage(Waiting_Orders_msg);
+
+		string Available_cooks_msg = "Available VIP cooks = ";
+		Available_cooks_msg.append(to_string(nVIP));
+
+		Available_cooks_msg.append(", Available Vegan cooks = ");
+		Available_cooks_msg.append(to_string(nVegan));
+
+		Available_cooks_msg.append(", Available Normal cooks = ");
+		Available_cooks_msg.append(to_string(nNormal));
+
+		pGUI->PrintMessage(Available_cooks_msg );
+
+		
+
+		pGUI->PrintMessage("Please click to continue..");
+		pGUI->waitForClick();
+		CurrentTime++;
+		pGUI->ResetDrawingList(); // to reset the drawing list and then update it with the following loop data
+	
+	}
+
+	
+
+
+}
 

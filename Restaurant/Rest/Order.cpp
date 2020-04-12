@@ -1,4 +1,6 @@
 #include "Order.h"
+#include "..\Rest\Restaurant.h"
+
 
 Order::Order(int id, ORD_TYPE r_Type)
 {
@@ -6,6 +8,16 @@ Order::Order(int id, ORD_TYPE r_Type)
 	type = r_Type;
 	status = WAIT;
 }
+
+Order::Order(int id, ORD_TYPE r_Type, int size, double tMoney)
+{
+	ID = (id > 0 && id < 1000) ? id : 0;	//1<ID<999
+	type = r_Type;
+	status = WAIT;
+	Size = size;
+	totalMoney = tMoney;
+}
+
 
 Order::~Order()
 {
@@ -44,3 +56,49 @@ ORD_STATUS Order::getStatus() const
 	return status;
 }
 
+void Order::setType(ORD_TYPE t)
+{
+	type = t;
+}
+
+void Order::SetServTime(int time)
+{
+	ServTime = time;
+}
+
+
+int Order::GetServTime()
+{
+	return ServTime;
+}
+
+void Order::setSize(int s)
+{
+	Size = s;
+}
+
+int Order::getSize() const
+{
+	return Size;
+}
+
+void Order::settotalmoney(double m)
+{
+	totalMoney = m;
+}
+
+double Order::gettotalmoney() const
+{
+	return totalMoney;
+}
+
+void Order::setArrTime(int time)
+{
+	ArrTime = time;
+}
+
+
+int Order::getArrTime()
+{
+	return ArrTime;
+}

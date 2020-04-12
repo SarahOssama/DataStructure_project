@@ -4,6 +4,7 @@
 GUI::GUI()
 {
 	DrawingItemsCount = 0;
+	indicator = 1;
 	pWind = new window(WindWidth+15,WindHeight,0,0); 
 	pWind->ChangeTitle("The Restautant");
 
@@ -44,15 +45,33 @@ string GUI::GetString() const
 		if(Key == 27 )	//ESCAPE key is pressed
 			return "";	//returns nothing as user has cancelled label
 		if(Key == 13 )	//ENTER key is pressed
+		{
+			ClearStatusBar();
 			return Label;
+			
+		}
+			
+					
 		if((Key == 8) && (Label.size() >= 1))	//BackSpace is pressed
 			Label.resize(Label.size() -1 );			
 		else
 			Label += Key;
+
+		StringPrintMessage(Label);
 		
-		PrintMessage(Label);
 	}
+	
 }
+void GUI::StringPrintMessage(string msg) const
+{
+	ClearStatusBar();//First clear the status bar
+	pWind->SetPen(DARKRED);
+	pWind->SetFont(18, BOLD, BY_NAME, "Arial");
+	pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.2), msg);
+	GUI* ptr = const_cast<GUI*> (this);
+	ptr->indicator = 1;
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // ================================== OUTPUT FUNCTIONS ===================================
@@ -60,12 +79,42 @@ string GUI::GetString() const
 
 void GUI::PrintMessage(string msg) const	//Prints a message on status bar
 {
-	ClearStatusBar();	//First clear the status bar
 	
+	GUI* ptr = const_cast<GUI*> (this);
+	if (indicator > 4)
+	{
+		ClearStatusBar();//First clear the status bar
+
+		ptr->indicator = 1;
+	}
+
+
 	pWind->SetPen(DARKRED);
-	pWind->SetFont(18, BOLD , BY_NAME, "Arial");   
-	pWind->DrawString(10, WindHeight - (int) (StatusBarHeight/1.5), msg); // You may need to change these coordinates later 
-	                                                                      // to be able to write multi-line
+	pWind->SetFont(18, BOLD, BY_NAME, "Arial");
+	// You may need to change these coordinates later 
+																			// to be able to write multi-line
+	switch (indicator)
+	{
+	case 1:
+		pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.2), msg);
+		ptr->indicator++;
+		break;
+	case 2:
+		pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 1.5), msg);
+		ptr->indicator++;
+		break;
+	case 3:
+		pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 2), msg);
+		ptr->indicator++;
+		break;
+	case 4:
+		pWind->DrawString(10, WindHeight - (int)(StatusBarHeight / 3), msg);
+		ptr->indicator++;
+		break;
+	default:
+		break;
+	}
+
 }
 //////////////////////////////////////////////////////////////////////////////////////////
 void GUI::DrawString(const int iX, const int iY, const string Text)
