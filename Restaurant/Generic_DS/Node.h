@@ -45,7 +45,7 @@ Node<T>::Node( const T& r_Item, Node<T>* nextNodePtr)
 	item = r_Item;
 	next = nextNodePtr;
 }
-
+1
 
 template < typename T>
 void Node<T>::setItem( const T& r_Item)

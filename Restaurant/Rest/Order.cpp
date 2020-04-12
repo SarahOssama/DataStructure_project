@@ -71,3 +71,34 @@ int Order::GetServTime()
 {
 	return ServTime;
 }
+
+void Order::setSize(int s)
+{
+	Size = s;
+}
+
+int Order::getSize() const
+{
+	return Size;
+}
+
+void Order::settotalmoney(double m)
+{
+	totalMoney = m;
+}
+
+double Order::gettotalmoney() const
+{
+	return totalMoney;
+}
+
+void Order::setArrTime(int time)
+{
+	ArrTime = time;
+}
+
+
+int Order::getArrTime()
+{
+	return ArrTime;
+}
