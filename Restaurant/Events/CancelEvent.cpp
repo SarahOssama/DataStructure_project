@@ -11,7 +11,7 @@ CancelEvent::CancelEvent(int eTime, int oID) :Event(eTime, oID)
 void CancelEvent::Execute(Restaurant* pRest)
 {
 
-	//bool deleted = pRest->DeleteOrder();
+	pRest->DeleteOrder(getOrderID());
 
 	//Add test
 }
