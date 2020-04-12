@@ -58,7 +58,7 @@ public:
 	double gettotalmoney() const;
 
 	void setArrTime(int time);
-	int getArrTime() const;
+	int getArrTime() ;
 
 };
 
